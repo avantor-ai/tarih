@@ -1,0 +1,208 @@
+{
+ "atauy": "Төте жазу (қазақ араб әліпбиі)",
+ "avtor": "Ахмет Байтұрсынұлы, 1912 ж. реформалаған",
+ "qoldanys": "1912–1929 жж. Қазақстанда; бүгінде ҚХР қазақтары қолданады",
+ "bagyt": "оңнан солға",
+ "erekshelik": "Дауысты дыбыстар сингармонизм бойынша дәйекші (ٴ) арқылы ажыратылады: сөз жіңішке болса, басына хамза қойылады.",
+ "derek": "Байтұрсынұлы А. «Оқу құралы» (1912); тексерілген кесте — dataset/tote/baitursynuly-01.jpg",
+ "signs": [
+  {
+   "arab": "ا",
+   "kaz": "А",
+   "latin": "a",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ٴا",
+   "kaz": "Ә",
+   "latin": "ä",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ب",
+   "kaz": "Б",
+   "latin": "b",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ۆ",
+   "kaz": "В",
+   "latin": "v",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "گ",
+   "kaz": "Г",
+   "latin": "g",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ع",
+   "kaz": "Ғ",
+   "latin": "ğ",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "د",
+   "kaz": "Д",
+   "latin": "d",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ە",
+   "kaz": "Е",
+   "latin": "e",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ج",
+   "kaz": "Ж",
+   "latin": "j",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ز",
+   "kaz": "З",
+   "latin": "z",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ي",
+   "kaz": "И, Й",
+   "latin": "i, y",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ك",
+   "kaz": "К",
+   "latin": "k",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ق",
+   "kaz": "Қ",
+   "latin": "q",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ل",
+   "kaz": "Л",
+   "latin": "l",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "م",
+   "kaz": "М",
+   "latin": "m",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ن",
+   "kaz": "Н",
+   "latin": "n",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ڭ",
+   "kaz": "Ң",
+   "latin": "ñ",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "و",
+   "kaz": "О",
+   "latin": "o",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ٶ",
+   "kaz": "Ө",
+   "latin": "ö",
+   "type": "dauysty"
+  },
+  {
+   "arab": "پ",
+   "kaz": "П",
+   "latin": "p",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ر",
+   "kaz": "Р",
+   "latin": "r",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "س",
+   "kaz": "С",
+   "latin": "s",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ت",
+   "kaz": "Т",
+   "latin": "t",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ۋ",
+   "kaz": "У",
+   "latin": "w, u",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ۇ",
+   "kaz": "Ұ",
+   "latin": "ū",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ٷ",
+   "kaz": "Ү",
+   "latin": "ü",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ف",
+   "kaz": "Ф",
+   "latin": "f",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ح",
+   "kaz": "Х",
+   "latin": "h",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ھ",
+   "kaz": "Һ",
+   "latin": "h",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "چ",
+   "kaz": "Ч",
+   "latin": "ç",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ش",
+   "kaz": "Ш",
+   "latin": "ş",
+   "type": "dauyssyz"
+  },
+  {
+   "arab": "ى",
+   "kaz": "Ы",
+   "latin": "ı",
+   "type": "dauysty"
+  },
+  {
+   "arab": "ٸ",
+   "kaz": "І",
+   "latin": "i",
+   "type": "dauysty"
+  }
+ ]
+}

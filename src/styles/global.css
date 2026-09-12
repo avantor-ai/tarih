@@ -1,0 +1,206 @@
+/* ══════════════════════════════════════════════════════════════
+   Тас жазулар — дизайн жүйесі
+   Түс палитрасы: дала тасы, папирус, түркі көгілдірі, күн сәулесі
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* негізгі түстер */
+  --stone-900: #14110E;
+  --stone-800: #1A1714;
+  --stone-700: #262119;
+  --stone-600: #3A3227;
+  --stone-400: #6B5D4A;
+
+  --parchment: #EDE4D3;
+  --parchment-dim: #D9CDB8;
+  --sand: #C4B49A;
+
+  --turquoise: #2E9B96;
+  --turquoise-bright: #3FC7C0;
+  --ochre: #C9973F;
+  --ochre-bright: #E5B45C;
+
+  --ink: #14110E;
+
+  /* типографика */
+  --display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --runic: 'Noto Sans Old Turkic', 'Segoe UI Historic', sans-serif;
+  --arabic: 'Noto Naskh Arabic', 'Times New Roman', serif;
+
+  /* ырғақ */
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+  --section-y: clamp(4rem, 12vh, 9rem);
+  --radius: 14px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--body);
+  background: var(--stone-800);
+  color: var(--parchment);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+h1 { font-size: clamp(2.6rem, 7.5vw, 6.4rem); }
+h2 { font-size: clamp(2rem, 4.6vw, 3.9rem); }
+h3 { font-size: clamp(1.15rem, 2vw, 1.6rem); }
+
+/* Референстегідей курсив екпін */
+.accent-italic {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--ochre-bright);
+}
+
+p { margin: 0 0 1rem; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+img { max-width: 100%; display: block; }
+
+/* ─────────────  жазу түрлері  ───────────── */
+
+.runic {
+  font-family: var(--runic);
+  direction: rtl;
+  unicode-bidi: bidi-override;
+  letter-spacing: 0.06em;
+  line-height: 1.9;
+}
+
+.arabic {
+  font-family: var(--arabic);
+  direction: rtl;
+  font-size: 1.35em;
+  line-height: 2;
+}
+
+.latin-translit {
+  font-family: var(--body);
+  font-style: italic;
+  color: var(--turquoise-bright);
+  letter-spacing: 0.01em;
+}
+
+/* ─────────────  құрылым  ───────────── */
+
+.container {
+  width: min(1280px, 100% - var(--gutter) * 2);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section-y);
+  position: relative;
+}
+
+.section--dark   { background: var(--stone-800); color: var(--parchment); }
+.section--darker { background: var(--stone-900); color: var(--parchment); }
+.section--light  { background: var(--parchment); color: var(--ink); }
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--turquoise);
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 34px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.section--light .eyebrow { color: #1E6E6A; }
+
+/* ─────────────  батырмалар  ───────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.7rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: transform 0.25s var(--ease), background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+.btn--primary {
+  background: var(--turquoise);
+  color: #06201F;
+}
+.btn--primary:hover { background: var(--turquoise-bright); }
+
+.btn--ghost {
+  border-color: rgba(237, 228, 211, 0.28);
+  color: var(--parchment);
+  background: rgba(237, 228, 211, 0.04);
+}
+.btn--ghost:hover { border-color: var(--turquoise); background: rgba(46, 155, 150, 0.12); }
+
+.section--light .btn--ghost {
+  border-color: rgba(20, 17, 14, 0.2);
+  color: var(--ink);
+  background: transparent;
+}
+
+/* ─────────────  скролл анимациясы  ───────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ─────────────  ұсақ бөлшектер  ───────────── */
+
+::selection { background: var(--turquoise); color: #06201F; }
+
+.scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--stone-600);
+  border-radius: 99px;
+}
