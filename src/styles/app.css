@@ -25,11 +25,12 @@
 
 .nav__logo { display: flex; align-items: center; gap: 0.6rem; }
 .nav__mark { font-size: 1.5rem; color: var(--turquoise-bright); }
-.nav__name { font-family: var(--display); font-weight: 700; font-size: 1.06rem; letter-spacing: -0.01em; }
+.nav__name { font-family: var(--display); font-weight: 700; font-size: 1.06rem; letter-spacing: -0.01em; white-space: nowrap; }
 
 .nav__links { display: flex; gap: 1.9rem; margin-left: auto; }
 .nav__links a {
   font-size: 0.9rem;
+  white-space: nowrap;
   font-weight: 500;
   opacity: 0.82;
   position: relative;
@@ -532,7 +533,7 @@
   .modal__media img { max-height: 40vh; }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 920px) {
   .nav__cta { display: none; }
   .nav__burger { display: flex; margin-left: auto; }
   .nav__links {
