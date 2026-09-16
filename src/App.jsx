@@ -4,6 +4,7 @@ import Nav from './components/Nav'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
 import Translator from './components/Translator'
+import Archive from './components/Archive'
 import Knowledge from './components/Knowledge'
 import About from './components/About'
 import Footer from './components/Footer'
@@ -48,6 +49,7 @@ export default function App() {
         </section>
 
         <Translator t={t} />
+        <Archive t={t} />
         <Knowledge t={t} />
         <About t={t} />
       </main>
