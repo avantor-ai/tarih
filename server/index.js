@@ -5,13 +5,14 @@
  * дәл осы server/recognize.js модулін пайдаланады. Логика бір жерде.
  */
 
+// Ең бірінші: .env оқылуы керек (қосымша сақтандыру — модульдер
+// баптауларды шақырылғанда оқиды, сондықтан тәртіп сындырмайды).
+import 'dotenv/config'
+
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import { getHealth, recognize, rateLimit, clientIp } from './recognize.js'
 import { transcribe } from './transcribe.js'
-
-dotenv.config()
 
 const app = express()
 const PORT = process.env.API_PORT || 8787

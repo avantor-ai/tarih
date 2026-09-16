@@ -10,10 +10,14 @@
  * қолмен таңдатпаймыз — модель өзі анықтайды.
  */
 
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
-const GEMINI_KEY = process.env.GEMINI_API_KEY
-const PROVIDER = process.env.AI_PROVIDER || 'gemini'
-const AI_ENABLED = process.env.AI_ENABLED !== 'false' && Boolean(GEMINI_KEY)
+// Баптаулар модуль жүктелгенде емес, шақырылғанда оқылады —
+// себебі recognize.js-тегідей (ES импорттары dotenv-тен бұрын жүреді).
+const cfg = () => ({
+  provider: process.env.AI_PROVIDER || 'gemini',
+  model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+  key: process.env.GEMINI_API_KEY,
+})
+const aiEnabled = () => process.env.AI_ENABLED !== 'false' && Boolean(cfg().key)
 
 const MAX_IMAGE_BYTES = 6 * 1024 * 1024
 
@@ -55,12 +59,8 @@ export const TRANSCRIBE_PROMPT = `Сен — мұрағат құжаттарын
 - Суретте құжат болмаса немесе мәтін мүлде оқылмаса: blocks бос, confidence 0.`
 
 export function getTranscribeHealth() {
-  return {
-    ok: true,
-    provider: PROVIDER,
-    aiReady: AI_ENABLED,
-    model: GEMINI_MODEL,
-  }
+  const { provider, model } = cfg()
+  return { ok: true, provider, aiReady: aiEnabled(), model }
 }
 
 /**
@@ -68,12 +68,12 @@ export function getTranscribeHealth() {
  * @returns {Promise<{status: number, body: object}>}
  */
 export async function transcribe({ imageBase64, mimeType }) {
-  if (!AI_ENABLED) {
+  if (!aiEnabled()) {
     return {
       status: 503,
       body: {
         error: 'ai_disabled',
-        message: GEMINI_KEY
+        message: cfg().key
           ? 'Цифрлау режимі әдейі өшірілген (AI_ENABLED=false)'
           : 'API кілті табылмады — цифрлау үшін кілт қажет',
       },
@@ -91,17 +91,18 @@ export async function transcribe({ imageBase64, mimeType }) {
     }
   }
 
-  if (PROVIDER !== 'gemini') {
+  const { provider, model, key } = cfg()
+  if (provider !== 'gemini') {
     return {
       status: 501,
       body: {
         error: 'unknown_provider',
-        message: `AI_PROVIDER="${PROVIDER}" әлі қосылмаған.`,
+        message: `AI_PROVIDER="${provider}" әлі қосылмаған.`,
       },
     }
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_KEY}`
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`
 
   let upstream
   try {
@@ -116,9 +117,15 @@ export async function transcribe({ imageBase64, mimeType }) {
           ],
         }],
         generationConfig: {
-          temperature: 0.1,           // көшіру дәл болуы керек, қиял емес
+          temperature: 0.1,              // көшіру дәл болуы керек, қиял емес
           responseMimeType: 'application/json',
-          maxOutputTokens: 8192,      // көпжолды құжат сыюы үшін
+          maxOutputTokens: 16384,        // көпбетті құжат сыюы үшін
+          // Gemini 2.5 Flash-та "ойлану" әдепкі бойынша қосулы, әрі оның
+          // токендері СОЛ ЛИМИТТЕН алынады. Шектеусіз қалдырсақ, модель
+          // 7800 токенді ойлануға жұмсап, жауап жартылай үзіліп қалады.
+          // Мүлде өшірсек те нашар: модель шашыраңқы жазып, лимитке тағы
+          // тіреледі. Өлшеп таңдалған орта жол — 2048.
+          thinkingConfig: { thinkingBudget: 2048 },
         },
       }),
     })
@@ -145,7 +152,19 @@ export async function transcribe({ imageBase64, mimeType }) {
   }
 
   const data = await upstream.json()
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+  const candidate = data?.candidates?.[0]
+  const text = candidate?.content?.parts?.[0]?.text ?? ''
+
+  if (candidate?.finishReason === 'MAX_TOKENS') {
+    return {
+      status: 502,
+      body: {
+        error: 'truncated',
+        message: 'Бет тым көлемді — жауап толық сыймады. '
+          + 'Бетті екіге бөліп немесе жеке бөліктерін жүктеп көріңіз.',
+      },
+    }
+  }
 
   let parsed = null
   try {
@@ -167,6 +186,6 @@ export async function transcribe({ imageBase64, mimeType }) {
 
   return {
     status: 200,
-    body: { ok: true, source: 'gemini', model: GEMINI_MODEL, result: parsed },
+    body: { ok: true, source: 'gemini', model, result: parsed },
   }
 }

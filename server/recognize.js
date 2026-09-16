@@ -9,16 +9,26 @@
  * API кілті ЕШҚАШАН браузерге жіберілмейді — тек осы жақта оқылады.
  */
 
-const PROVIDER = process.env.AI_PROVIDER || 'gemini'
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
-const GEMINI_KEY = process.env.GEMINI_API_KEY
+/**
+ * Баптауларды МОДУЛЬ ЖҮКТЕЛГЕНДЕ емес, ШАҚЫРЫЛҒАНДА оқимыз.
+ *
+ * Не́ге: ES модульдерінде импорттар файлдағы кез келген кодтан бұрын
+ * орындалады. Егер осы мәндерді модуль деңгейінде оқысақ, олар
+ * server/index.js ішіндегі dotenv.config() жұмыс істемей тұрып оқылып,
+ * кілт әрқашан бос болып шығады. Vercel-де айнымалылар процесс
+ * басталғанға дейін қойылады, сондықтан ол жақта бәрібір.
+ */
+const cfg = () => ({
+  provider: process.env.AI_PROVIDER || 'gemini',
+  model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+  key: process.env.GEMINI_API_KEY,
+})
 
 /**
  * AI режимін жариялы сайтта әдейі өшіріп қоюға болады.
  * Себебі: ашық тұрған сайтта кілтті кез келген адам жұмсай алады.
- * Vercel-де AI_ENABLED=true деп қойғанда ғана қосылады.
  */
-const AI_ENABLED = process.env.AI_ENABLED !== 'false' && Boolean(GEMINI_KEY)
+const aiEnabled = () => process.env.AI_ENABLED !== 'false' && Boolean(cfg().key)
 
 const MAX_IMAGE_BYTES = 6 * 1024 * 1024 // base64 күйіндегі шек
 
@@ -46,14 +56,16 @@ export const PROMPT = `Сен — көне түркі жазуы мен қаза
 /* ─────────────────────────  Денсаулық  ───────────────────────── */
 
 export function getHealth() {
+  const { provider, model, key } = cfg()
+  const ready = aiEnabled()
   return {
     ok: true,
-    provider: PROVIDER,
-    aiReady: AI_ENABLED,
-    model: GEMINI_MODEL,
-    message: AI_ENABLED
+    provider,
+    aiReady: ready,
+    model,
+    message: ready
       ? 'AI режимі дайын'
-      : GEMINI_KEY
+      : key
         ? 'AI режимі әдейі өшірілген (AI_ENABLED=false)'
         : 'API кілті табылмады — тек демо режимі жұмыс істейді',
   }
@@ -88,13 +100,10 @@ export function rateLimit(ip) {
  * @returns {Promise<{status: number, body: object}>}
  */
 export async function recognize({ imageBase64, mimeType }) {
-  if (!AI_ENABLED) {
+  if (!aiEnabled()) {
     return {
       status: 503,
-      body: {
-        error: 'ai_disabled',
-        message: getHealth().message,
-      },
+      body: { error: 'ai_disabled', message: getHealth().message },
     }
   }
 
@@ -112,12 +121,13 @@ export async function recognize({ imageBase64, mimeType }) {
     }
   }
 
-  if (PROVIDER !== 'gemini') {
+  const { provider } = cfg()
+  if (provider !== 'gemini') {
     return {
       status: 501,
       body: {
         error: 'unknown_provider',
-        message: `AI_PROVIDER="${PROVIDER}" әлі қосылмаған. Қазір тек "gemini" бар.`,
+        message: `AI_PROVIDER="${provider}" әлі қосылмаған. Қазір тек "gemini" бар.`,
       },
     }
   }
@@ -126,7 +136,8 @@ export async function recognize({ imageBase64, mimeType }) {
 }
 
 async function recognizeWithGemini({ imageBase64, mimeType }) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_KEY}`
+  const { model, key } = cfg()
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`
 
   let upstream
   try {
@@ -140,7 +151,14 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
             { inline_data: { mime_type: mimeType || 'image/jpeg', data: imageBase64 } },
           ],
         }],
-        generationConfig: { temperature: 0.2, responseMimeType: 'application/json' },
+        generationConfig: {
+          temperature: 0.2,
+          responseMimeType: 'application/json',
+          maxOutputTokens: 4096,
+          // Ойлану токендері де осы лимиттен алынады — шектемесек,
+          // жауапқа орын қалмай, JSON үзіліп қалады.
+          thinkingConfig: { thinkingBudget: 1024 },
+        },
       }),
     })
   } catch (err) {
@@ -166,7 +184,15 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
   }
 
   const data = await upstream.json()
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+  const candidate = data?.candidates?.[0]
+  const text = candidate?.content?.parts?.[0]?.text ?? ''
+
+  if (candidate?.finishReason === 'MAX_TOKENS') {
+    return {
+      status: 502,
+      body: { error: 'truncated', message: 'Жауап толық сыймады. Қайталап көріңіз.' },
+    }
+  }
 
   let parsed = null
   try {
@@ -189,7 +215,7 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
 
   return {
     status: 200,
-    body: { ok: true, source: 'gemini', model: GEMINI_MODEL, result: parsed },
+    body: { ok: true, source: 'gemini', model, result: parsed },
   }
 }
 
