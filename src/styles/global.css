@@ -23,7 +23,7 @@
   --ink: #14110E;
 
   /* типографика */
-  --display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --display: 'Lora', Georgia, 'Times New Roman', serif;
   --body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --runic: 'Noto Sans Old Turkic', 'Segoe UI Historic', sans-serif;
   --arabic: 'Noto Naskh Arabic', 'Times New Roman', serif;

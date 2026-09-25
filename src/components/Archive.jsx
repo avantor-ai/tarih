@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { fileToImage, downscaleForUpload } from '../lib/imageHash'
+import CameraPicker from './CameraPicker'
 
 const STATUS = { IDLE: 'idle', QUEUED: 'queued', WORKING: 'working', DONE: 'done', FAILED: 'failed' }
 
@@ -12,7 +13,6 @@ export default function Archive({ t }) {
   const [exporting, setExporting] = useState(false)
 
   const fileRef = useRef(null)
-  const cameraRef = useRef(null)
 
   useEffect(() => {
     fetch('/api/health')
@@ -187,12 +187,9 @@ export default function Archive({ t }) {
             </div>
             <p className="drop__title">{t.archive.dropTitle}</p>
             <p className="drop__hint">{t.archive.dropHint}</p>
-            <button
-              className="btn btn--ghost drop__camera"
-              onClick={(e) => { e.stopPropagation(); cameraRef.current?.click() }}
-            >
-              {t.archive.camera}
-            </button>
+            <div className="drop__camera" onClick={(e) => e.stopPropagation()}>
+              <CameraPicker onCapture={(f) => addFiles([f])} label={t.archive.camera} />
+            </div>
           </div>
         ) : (
           <>
@@ -213,6 +210,10 @@ export default function Archive({ t }) {
               <button className="pages__add" onClick={() => fileRef.current?.click()}>
                 +<small>{t.archive.addPage}</small>
               </button>
+            </div>
+
+            <div className="archive__cam reveal">
+              <CameraPicker onCapture={(f) => addFiles([f])} label={t.archive.camera} compact />
             </div>
 
             <div className="archive__bar reveal">
@@ -286,10 +287,6 @@ export default function Archive({ t }) {
 
         <input
           ref={fileRef} type="file" accept="image/*" multiple hidden
-          onChange={(e) => { addFiles(e.target.files); e.target.value = '' }}
-        />
-        <input
-          ref={cameraRef} type="file" accept="image/*" capture="environment" hidden
           onChange={(e) => { addFiles(e.target.files); e.target.value = '' }}
         />
 

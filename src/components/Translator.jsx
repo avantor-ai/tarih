@@ -4,6 +4,7 @@ import runicAlphabet from '../data/alphabet-runic.json'
 import toteAlphabet from '../data/alphabet-tote.json'
 import { buildIndex, findMatch, fileToImage, downscaleForUpload } from '../lib/imageHash'
 import { autoTransliterate, transliterateRunic, transliterateTote } from '../lib/translit'
+import CameraPicker from './CameraPicker'
 
 const MODE = { DEMO: 'demo', AI: 'ai' }
 
@@ -21,7 +22,6 @@ export default function Translator({ t }) {
   const [dragOver, setDragOver] = useState(false)
 
   const fileRef = useRef(null)
-  const cameraRef = useRef(null)
 
   /* ── серверде кілт бар ма ── */
   useEffect(() => {
@@ -99,7 +99,6 @@ export default function Translator({ t }) {
   const reset = () => {
     setPreview(null); setResult(null); setError(null)
     if (fileRef.current) fileRef.current.value = ''
-    if (cameraRef.current) cameraRef.current.value = ''
   }
 
   return (
@@ -158,12 +157,9 @@ export default function Translator({ t }) {
                 <p className="drop__title">{t.translator.dropTitle}</p>
                 <p className="drop__hint">{t.translator.dropHint}</p>
 
-                <button
-                  className="btn btn--ghost drop__camera"
-                  onClick={(e) => { e.stopPropagation(); cameraRef.current?.click() }}
-                >
-                  ⃝ {t.translator.camera}
-                </button>
+                <div className="drop__camera" onClick={(e) => e.stopPropagation()}>
+                  <CameraPicker onCapture={handleFile} label={t.translator.camera} />
+                </div>
 
                 {index === null && (
                   <div className="drop__progress">
@@ -173,20 +169,23 @@ export default function Translator({ t }) {
                 )}
               </div>
             ) : (
-              <div className="preview">
-                <img src={preview} alt="" />
-                <button className="btn btn--ghost preview__reset" onClick={reset}>
-                  {t.translator.reset}
-                </button>
-              </div>
+              <>
+                <div className="preview">
+                  <img src={preview} alt="" />
+                  <button className="btn btn--ghost preview__reset" onClick={reset}>
+                    {t.translator.reset}
+                  </button>
+                </div>
+                {/* Тізім сурет жүктелген соң да көрініп тұрсын —
+                    презентацияда қайта түсіру ыңғайлы болуы үшін */}
+                <div className="preview__cam">
+                  <CameraPicker onCapture={handleFile} label={t.translator.camera} compact />
+                </div>
+              </>
             )}
 
             <input
               ref={fileRef} type="file" accept="image/*" hidden
-              onChange={(e) => handleFile(e.target.files?.[0])}
-            />
-            <input
-              ref={cameraRef} type="file" accept="image/*" capture="environment" hidden
               onChange={(e) => handleFile(e.target.files?.[0])}
             />
           </div>
