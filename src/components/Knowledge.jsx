@@ -3,16 +3,25 @@ import monuments from '../data/monuments.json'
 import runicAlphabet from '../data/alphabet-runic.json'
 import toteAlphabet from '../data/alphabet-tote.json'
 
-const TABS = ['all', 'runic', 'tote', 'alphabet']
+const TABS = ['all', 'runic', 'tote', 'chagatai', 'alphabet']
+
+/** Жазу түрінің қысқа белгісі (карточкада) */
+const TYPE_LABEL = { runic: 'көне түркі', tote: 'төте жазу', chagatai: 'шағатай' }
+
+/** Карточкадағы үлгі мәтін: руника/араб таңбалары, шағатайда — транскрипция басы */
+const sampleText = (m) =>
+  m.type === 'runic' ? m.runic : m.type === 'chagatai' ? m.transkripsiya : m.arab
+
+const sampleClass = (m) =>
+  m.type === 'runic' ? 'runic' : m.type === 'chagatai' ? 'card__script--text' : 'arabic'
 
 export default function Knowledge({ t }) {
   const [tab, setTab] = useState('all')
   const [open, setOpen] = useState(null)
 
   const items = useMemo(() => {
-    if (tab === 'runic') return monuments.items.filter((m) => m.type === 'runic')
-    if (tab === 'tote') return monuments.items.filter((m) => m.type === 'tote')
-    return monuments.items
+    if (tab === 'all') return monuments.items
+    return monuments.items.filter((m) => m.type === tab)
   }, [tab])
 
   // Esc — жабу
@@ -31,6 +40,7 @@ export default function Knowledge({ t }) {
     all: t.knowledge.tabAll,
     runic: t.knowledge.tabRunic,
     tote: t.knowledge.tabTote,
+    chagatai: t.knowledge.tabChagatai,
     alphabet: t.knowledge.tabAlphabet,
   }
 
@@ -68,17 +78,13 @@ export default function Knowledge({ t }) {
               <button className="card reveal" key={m.id} onClick={() => setOpen(m)}>
                 <div className="card__img">
                   <img src={m.image} alt={m.atauy} loading="lazy" />
-                  <span className="card__type">
-                    {m.type === 'runic' ? 'көне түркі' : 'төте жазу'}
-                  </span>
+                  <span className="card__type">{TYPE_LABEL[m.type]}</span>
                 </div>
                 <div className="card__body">
                   <h3 className="card__title">{m.atauy}</h3>
                   <p className="card__meta">{m.aimaq}</p>
                   <p className="card__date">{m.jyl}</p>
-                  <div className={`card__script ${m.type === 'runic' ? 'runic' : 'arabic'}`}>
-                    {m.type === 'runic' ? m.runic : m.arab}
-                  </div>
+                  <div className={`card__script ${sampleClass(m)}`}>{sampleText(m)}</div>
                 </div>
               </button>
             ))}
@@ -107,7 +113,7 @@ function Detail({ t, m, onClose }) {
 
           <div className="modal__info">
             <p className="eyebrow">
-              {m.type === 'runic' ? t.knowledge.tabRunic : t.knowledge.tabTote}
+              {{ runic: t.knowledge.tabRunic, tote: t.knowledge.tabTote, chagatai: t.knowledge.tabChagatai }[m.type]}
             </p>
             <h3>{m.atauy}</h3>
             <p className="modal__ru">{m.atauy_ru}</p>
@@ -118,6 +124,19 @@ function Detail({ t, m, onClose }) {
               {m.ashylgan && <div><dt>{t.knowledge.found}</dt><dd>{m.ashylgan}</dd></div>}
             </dl>
 
+            {m.type === 'chagatai' ? (
+              <>
+                <div className="modal__script">
+                  <span className="field__label">{t.translator.transcription}</span>
+                  <div className="modal__kazakh modal__longtext">{m.transkripsiya}</div>
+                </div>
+                <div className="modal__script">
+                  <span className="field__label">{t.translator.translation}</span>
+                  <div className="modal__kazakh modal__longtext">{m.tolyq_kazakh}</div>
+                </div>
+              </>
+            ) : (
+            <>
             <div className="modal__script">
               <span className="field__label">
                 {m.type === 'runic' ? 'Таңбалар' : 'Төте жазумен'}
@@ -138,6 +157,8 @@ function Detail({ t, m, onClose }) {
               <span className="field__label">Қазіргі қазақ тілінде</span>
               <div className="modal__kazakh">{m.tolyq_kazakh}</div>
             </div>
+            </>
+            )}
 
             <p className="modal__desc">{m.sipattama}</p>
           </div>

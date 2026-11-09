@@ -309,7 +309,12 @@ function ResultCard({ t, result }) {
 
         {a.signs && (
           <Field label={t.translator.signs}>
-            <span className={a.script === 'tote' ? 'arabic' : 'runic'}>{a.signs}</span>
+            <span className={a.script === 'runic' ? 'runic' : 'arabic'}>{a.signs}</span>
+          </Field>
+        )}
+        {a.transcription && (
+          <Field label={t.translator.transcription}>
+            <LongText text={a.transcription} t={t} />
           </Field>
         )}
         {a.latin && (
@@ -317,8 +322,17 @@ function ResultCard({ t, result }) {
             <span className="latin-translit">{a.latin}</span>
           </Field>
         )}
-        {a.kazakh && <Field label={t.translator.modern}><strong>{a.kazakh}</strong></Field>}
-        {a.translation && <Field label={t.translator.meaning}>{a.translation}</Field>}
+        {a.kazakh && a.script !== 'chagatai' && (
+          <Field label={t.translator.modern}><strong>{a.kazakh}</strong></Field>
+        )}
+        {a.translation && (
+          <Field label={a.script === 'chagatai' ? t.translator.translation : t.translator.meaning}>
+            <LongText text={a.translation} t={t} />
+          </Field>
+        )}
+        {a.script === 'chagatai' && (
+          <p className="result__notes">{t.translator.chagataiAiNote}</p>
+        )}
         {a.notes && <p className="result__notes">{a.notes}</p>}
       </div>
     )
@@ -326,6 +340,30 @@ function ResultCard({ t, result }) {
 
   // демо режимі — эталондық базадан
   const m = result.item
+
+  // Шағатай хаты: таңбалар емес, толық мәтін — транскрипция мен аударма
+  if (m.type === 'chagatai') {
+    return (
+      <div className="result">
+        <div className="result__badge">{t.translator.chagatai}</div>
+        <h3>{m.atauy}</h3>
+        <p className="result__meta">{m.aimaq} · {m.jyl}</p>
+
+        <Confidence t={t} value={result.confidence} />
+
+        <Field label={t.translator.transcription}>
+          <LongText text={m.transkripsiya} t={t} />
+        </Field>
+        <Field label={t.translator.translation}>
+          <LongText text={m.tolyq_kazakh} t={t} />
+        </Field>
+
+        <p className="result__notes">{t.translator.chagataiNote}</p>
+        <p className="result__source">{m.sipattama}</p>
+      </div>
+    )
+  }
+
   const signs = m.type === 'runic' ? m.runic : m.arab
   const auto = m.type === 'runic'
     ? transliterateRunic(m.runic || '')
@@ -392,6 +430,23 @@ function ManualResult({ t, r }) {
         <p className="result__notes">
           танылмаған таңба: {[...new Set(r.unknown)].join(' ')}
         </p>
+      )}
+    </div>
+  )
+}
+
+/** Ұзын мәтін: алғашында бірнеше жол, батырмамен толық ашылады */
+function LongText({ text, t, limit = 420 }) {
+  const [open, setOpen] = useState(false)
+  if (!text) return null
+  const long = text.length > limit
+  return (
+    <div className="longtext">
+      <p className={`longtext__body ${long && !open ? 'is-clamped' : ''}`}>{text}</p>
+      {long && (
+        <button className="longtext__toggle" onClick={() => setOpen(!open)}>
+          {open ? t.translator.showLess : t.translator.showMore}
+        </button>
       )}
     </div>
   )

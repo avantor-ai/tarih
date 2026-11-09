@@ -421,6 +421,20 @@
 .modal__script .runic { font-size: 1.75rem; color: var(--parchment); }
 .modal__script .arabic { font-size: 1.65rem; color: var(--parchment); }
 .modal__kazakh { font-size: 1.02rem; line-height: 1.6; }
+.modal__longtext { white-space: pre-line; font-size: 0.95rem; }
+
+/* шағатай хаттары: карточкада транскрипцияның басы */
+.card__script--text { font-size: 0.86rem; font-style: italic; }
+
+/* ұзын мәтін (транскрипция, аударма) */
+.longtext__body { white-space: pre-line; font-size: 0.95rem; line-height: 1.6; }
+.longtext__body.is-clamped {
+  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;
+}
+.longtext__toggle {
+  margin-top: 0.35rem; padding: 0; border: 0; background: none; cursor: pointer;
+  font-size: 0.8rem; color: #1E6E6A; text-decoration: underline; text-underline-offset: 3px;
+}
 .modal__desc {
   margin-top: 1.4rem; padding-top: 1.1rem;
   border-top: 1px solid rgba(237,228,211,0.1);
