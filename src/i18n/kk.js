@@ -127,6 +127,8 @@ export default {
     tabTote: 'Төте жазу',
     tabChagatai: 'Шағатай хаттары',
     tabAlphabet: 'Әліпби',
+    expand: 'Білім қорын ашу',
+    collapse: 'Жию',
     region: 'Аймақ',
     date: 'Мерзімі',
     found: 'Табылуы',

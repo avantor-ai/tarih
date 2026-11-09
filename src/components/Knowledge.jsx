@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import monuments from '../data/monuments.json'
 import runicAlphabet from '../data/alphabet-runic.json'
 import toteAlphabet from '../data/alphabet-tote.json'
@@ -18,6 +18,32 @@ const sampleClass = (m) =>
 export default function Knowledge({ t }) {
   const [tab, setTab] = useState('all')
   const [open, setOpen] = useState(null)
+  // Бөлім әдепкіде жиулы тұрады — сайт тым ұзын болмас үшін
+  const [expanded, setExpanded] = useState(
+    () => typeof window !== 'undefined' && window.location.hash === '#knowledge'
+  )
+  const sectionRef = useRef(null)
+
+  // Мәзірдегі немесе hero-дағы «#knowledge» сілтемесі бөлімді ашады
+  useEffect(() => {
+    const onClick = (e) => {
+      if (e.target.closest?.('a[href="#knowledge"]')) setExpanded(true)
+    }
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
+  }, [])
+
+  const openTab = (id) => { setTab(id); setExpanded(true) }
+  const collapse = () => {
+    setExpanded(false)
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const counts = useMemo(() => {
+    const c = { runic: 0, tote: 0, chagatai: 0 }
+    for (const m of monuments.items) c[m.type] = (c[m.type] || 0) + 1
+    return c
+  }, [])
 
   const items = useMemo(() => {
     if (tab === 'all') return monuments.items
@@ -45,7 +71,7 @@ export default function Knowledge({ t }) {
   }
 
   return (
-    <section id="knowledge" className="section section--dark knowledge">
+    <section id="knowledge" ref={sectionRef} className="section section--dark knowledge">
       <div className="container">
         <div className="knowledge__head reveal">
           <div>
@@ -58,6 +84,28 @@ export default function Knowledge({ t }) {
           <p className="knowledge__lead">{t.knowledge.lead}</p>
         </div>
 
+        {!expanded ? (
+          <div className="kb-summary reveal">
+            <div className="kb-summary__tiles">
+              {[
+                { id: 'runic', n: counts.runic, label: t.knowledge.tabRunic, glyph: '𐱅', cls: 'runic' },
+                { id: 'tote', n: counts.tote, label: t.knowledge.tabTote, glyph: 'ق', cls: 'arabic' },
+                { id: 'chagatai', n: counts.chagatai, label: t.knowledge.tabChagatai, glyph: 'خ', cls: 'arabic' },
+                { id: 'alphabet', n: '73 + 33', label: t.knowledge.tabAlphabet, glyph: 'Аа', cls: '' },
+              ].map((x) => (
+                <button key={x.id} className="kb-tile" onClick={() => openTab(x.id)}>
+                  <span className={`kb-tile__glyph ${x.cls}`}>{x.glyph}</span>
+                  <span className="kb-tile__n">{x.n}</span>
+                  <span className="kb-tile__label">{x.label}</span>
+                </button>
+              ))}
+            </div>
+            <button className="btn btn--ghost kb-summary__open" onClick={() => openTab('all')}>
+              {t.knowledge.expand} ↓
+            </button>
+          </div>
+        ) : (
+        <>
         <div className="tabs reveal">
           {TABS.map((id) => (
             <button
@@ -89,6 +137,12 @@ export default function Knowledge({ t }) {
               </button>
             ))}
           </div>
+        )}
+
+        <div className="kb-collapse">
+          <button className="btn btn--ghost" onClick={collapse}>{t.knowledge.collapse} ↑</button>
+        </div>
+        </>
         )}
       </div>
 
