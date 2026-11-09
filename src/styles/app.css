@@ -575,6 +575,9 @@
   .translator__grid,
   .modal__grid { grid-template-columns: 1fr; }
 
+  /* Бір бағанда бос нәтиже рамкасы екінші жүктеу өрісіне ұқсап кетеді */
+  .result--empty { display: none; }
+
   .stats { grid-template-columns: repeat(2, 1fr); }
   .footer__meta { text-align: left; }
   .modal__media img { max-height: 40vh; }

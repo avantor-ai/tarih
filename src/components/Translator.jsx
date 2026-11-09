@@ -201,7 +201,7 @@ export default function Translator({ t }) {
 
             {!busy && !error && !result && (
               <div className="result result--empty">
-                <p>{t.translator.dropHint}</p>
+                <p>{t.translator.resultEmpty}</p>
               </div>
             )}
           </div>
