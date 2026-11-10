@@ -12,7 +12,8 @@ export const REVIEWER_PHOTO = '/reviewer/zhumabayeva.jpg'
  */
 export default function ReviewModal({ t, lang, subject, onClose }) {
   const R = t.review
-  const [form, setForm] = useState({ name: '', purpose: '', email: '' })
+  // botcheck — адамға көрінбейтін өріс: оны тек спам-бот толтырады
+  const [form, setForm] = useState({ name: '', purpose: '', email: '', botcheck: '' })
   const [errors, setErrors] = useState({})
   const [state, setState] = useState('form') // form | sending | done | error
   const firstRef = useRef(null)
@@ -53,6 +54,7 @@ export default function ReviewModal({ t, lang, subject, onClose }) {
         email: form.email.trim(),
         lang,
         subject,
+        botcheck: form.botcheck,
         page: window.location.href,
         createdAt: new Date().toISOString(),
       })
@@ -120,6 +122,9 @@ export default function ReviewModal({ t, lang, subject, onClose }) {
                 <input id="rv-email" type="email" inputMode="email" autoComplete="email"
                        value={form.email} onChange={set('email')} placeholder={R.emailPh} />
               </Field>
+
+              <input type="text" name="botcheck" className="rv__trap" tabIndex={-1} autoComplete="off"
+                     aria-hidden="true" value={form.botcheck} onChange={set('botcheck')} />
 
               <p className="rv__consent">{R.consent}</p>
               {state === 'error' && <p className="rv__error" role="alert">{R.errSend}</p>}

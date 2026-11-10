@@ -1091,3 +1091,5 @@
 }
 .rv__main .btn--ghost { border-color: rgba(20,17,14,0.2); color: var(--ink); background: transparent; }
 .rv__main .btn--ghost:hover { border-color: var(--turquoise); background: rgba(46,155,150,0.08); }
+/* спам-тұзақ: экраннан тыс, оқу құралдарына да көрінбейді */
+.rv__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
