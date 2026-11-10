@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useCameras, cameraLabel, cameraErrorText } from '../lib/useCameras'
 
 /**
@@ -142,7 +143,10 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
     }, 'image/jpeg', 0.92)
   }
 
-  return (
+  // Порталмен body-ге шығарамыз: ата-аналардағы .reveal анимациясының
+  // transform-ы position:fixed-ті экранға емес, сол блокқа байлап қояды да,
+  // терезе экраннан төмен ығысып кетеді (iPad-та түсіру батырмасы көрінбеген).
+  return createPortal(
     <div className="cammodal" onClick={onClose}>
       <div className="cammodal__box" onClick={(e) => e.stopPropagation()}>
         <button className="cammodal__close" onClick={onClose} aria-label="Жабу">×</button>
@@ -163,6 +167,19 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
             />
           )}
           {!err && !ready && <p className="cammodal__loading">Камера қосылуда…</p>}
+
+          {/* Үлкен дөңгелек батырма — планшетте бір басумен түсіру үшін.
+              Видеоның үстінде тұрады, сондықтан экран аласа болса да көрінеді. */}
+          {!err && (
+            <button
+              className="cammodal__shutter"
+              onClick={shoot}
+              disabled={!ready}
+              aria-label="Түсіру"
+            >
+              <span />
+            </button>
+          )}
         </div>
 
         <div className="cammodal__bar">
@@ -183,6 +200,7 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
