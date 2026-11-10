@@ -22,7 +22,7 @@
  */
 
 // Web3Forms кілті (UUID). Алынған соң осында қойылады.
-const WEB3FORMS_KEY_DEFAULT = ''
+const WEB3FORMS_KEY_DEFAULT = '58a19580-6ee4-45b6-8af8-19130f9fde1c'
 
 export const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || WEB3FORMS_KEY_DEFAULT
 const WEB3FORMS_URL = 'https://api.web3forms.com/submit'
