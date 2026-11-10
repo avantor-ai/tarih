@@ -141,7 +141,7 @@ export async function buildDocx({ pages, L, blocks, title = L.title }) {
   children.push(body(L.footer, { size: 18, italic: true, color: '888888' }))
 
   const doc = new Document({
-    creator: 'Тас жазулар',
+    creator: 'TAMĞA AI',
     title,
     description: L.description,
     sections: [{ properties: {}, children }],

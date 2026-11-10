@@ -4,14 +4,14 @@ export default {
   code: 'tr',
 
   meta: {
-    title: 'Tas Jazular — Ataların Sesi',
+    title: 'TAMĞA AI — Ataların Sesi',
     description: 'Eski Türk runik yazısını, Töte yazısını ve Çağatayca mektupları günümüz diline çeviren proje.',
   },
 
   lang: { label: 'Dil' },
 
   nav: {
-    brand: 'Tas Jazular',
+    brand: 'TAMĞA AI',
     home: 'Ana sayfa',
     translate: 'Çevirmen',
     archive: 'Arşiv',
@@ -22,7 +22,7 @@ export default {
   },
 
   hero: {
-    title: 'Tas Jazular —',
+    title: 'TAMĞA AI —',
     titleAccent: 'ataların sesi',
     subtitle:
       'Köl Tigin, Bilge Kağan ve Tonyukuk yazıtlarındaki Eski Türk yazısını, '
@@ -266,7 +266,7 @@ export default {
   },
 
   footer: {
-    tagline: 'Tas Jazular',
+    tagline: 'TAMĞA AI',
     made: 'Açık kaynaklara dayanılarak hazırlandı',
     sources: 'Görseller: Wikimedia Commons (public domain / CC). Alfabe: Unicode Old Turkic, V. Thomsen (1893).',
   },

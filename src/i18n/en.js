@@ -4,14 +4,14 @@ export default {
   code: 'en',
 
   meta: {
-    title: 'Tas Jazular — Voice of the Ancestors',
+    title: 'TAMĞA AI — Voice of the Ancestors',
     description: 'A project that translates Old Turkic runes, Tote script and Chagatai letters into a modern language.',
   },
 
   lang: { label: 'Language' },
 
   nav: {
-    brand: 'Tas Jazular',
+    brand: 'TAMĞA AI',
     home: 'Home',
     translate: 'Translator',
     archive: 'Archive',
@@ -22,7 +22,7 @@ export default {
   },
 
   hero: {
-    title: 'Tas Jazular —',
+    title: 'TAMĞA AI —',
     titleAccent: 'voice of the ancestors',
     subtitle:
       'We translate the Old Turkic inscriptions of Kul Tigin, Bilge Kagan and Tonyukuk, '
@@ -266,7 +266,7 @@ export default {
   },
 
   footer: {
-    tagline: 'Tas Jazular',
+    tagline: 'TAMĞA AI',
     made: 'Built on open sources',
     sources: 'Images: Wikimedia Commons (public domain / CC). Alphabet: Unicode Old Turkic, V. Thomsen (1893).',
   },

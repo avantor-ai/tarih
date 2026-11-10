@@ -8,14 +8,14 @@ export default {
   code: 'kk',
 
   meta: {
-    title: 'Тас жазулар — Бабалар үні',
+    title: 'TAMĞA AI — бабалар үні',
     description: 'Көне түркі руникасын, төте жазуды және шағатай хаттарын қазіргі тілге аударатын жоба.',
   },
 
   lang: { label: 'Тіл' },
 
   nav: {
-    brand: 'Тас жазулар',
+    brand: 'TAMĞA AI',
     home: 'Басты бет',
     translate: 'Аудармашы',
     archive: 'Мұрағат',
@@ -26,7 +26,7 @@ export default {
   },
 
   hero: {
-    title: 'Тас жазулар —',
+    title: 'TAMĞA AI —',
     titleAccent: 'бабалар үні',
     subtitle:
       'Күлтегін, Білге қаған, Тоныкөк ескерткіштеріндегі көне түркі жазуы мен '
@@ -273,7 +273,7 @@ export default {
   },
 
   footer: {
-    tagline: 'Тас жазулар',
+    tagline: 'TAMĞA AI',
     made: 'Ашық дереккөздер негізінде жасалды',
     sources: 'Суреттер: Wikimedia Commons (public domain / CC). Әліпби: Unicode Old Turkic, V. Thomsen (1893).',
   },

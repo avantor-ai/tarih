@@ -4,14 +4,14 @@ export default {
   code: 'ru',
 
   meta: {
-    title: 'Тас жазулар — голос предков',
+    title: 'TAMĞA AI — голос предков',
     description: 'Проект, который переводит древнетюркские руны, төте жазу и чагатайские письма на современный язык.',
   },
 
   lang: { label: 'Язык' },
 
   nav: {
-    brand: 'Тас жазулар',
+    brand: 'TAMĞA AI',
     home: 'Главная',
     translate: 'Переводчик',
     archive: 'Архив',
@@ -22,7 +22,7 @@ export default {
   },
 
   hero: {
-    title: 'Тас жазулар —',
+    title: 'TAMĞA AI —',
     titleAccent: 'голос предков',
     subtitle:
       'Переводим древнетюркские надписи Кюль-тегина, Бильге-кагана и Тоньюкука, '
@@ -266,7 +266,7 @@ export default {
   },
 
   footer: {
-    tagline: 'Тас жазулар',
+    tagline: 'TAMĞA AI',
     made: 'Сделано на основе открытых источников',
     sources: 'Изображения: Wikimedia Commons (public domain / CC). Алфавит: Unicode Old Turkic, V. Thomsen (1893).',
   },
