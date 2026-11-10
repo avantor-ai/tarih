@@ -13,6 +13,7 @@ import express from 'express'
 import cors from 'cors'
 import { getHealth, recognize, rateLimit, clientIp } from './recognize.js'
 import { transcribe } from './transcribe.js'
+import { msg, normLang } from './i18n.js'
 
 const app = express()
 const PORT = process.env.API_PORT || 8787
@@ -25,34 +26,36 @@ app.get('/api/health', (req, res) => {
 })
 
 app.post('/api/recognize', async (req, res) => {
+  const lang = normLang(req.body?.lang)
   const ip = clientIp(req.headers, req.socket?.remoteAddress)
   const limit = rateLimit(ip)
   if (!limit.allowed) {
     res.setHeader('Retry-After', String(limit.retryAfterSec))
     return res.status(429).json({
       error: 'rate_limit',
-      message: 'Сағаттық шектеу бітті. Кейінірек қайталаңыз.',
+      message: msg(lang, 'rate_limit'),
     })
   }
 
   const { imageBase64, mimeType } = req.body || {}
-  const { status, body } = await recognize({ imageBase64, mimeType })
+  const { status, body } = await recognize({ imageBase64, mimeType, lang })
   res.status(status).json(body)
 })
 
 app.post('/api/transcribe', async (req, res) => {
+  const lang = normLang(req.body?.lang)
   const ip = clientIp(req.headers, req.socket?.remoteAddress)
   const limit = rateLimit(ip)
   if (!limit.allowed) {
     res.setHeader('Retry-After', String(limit.retryAfterSec))
     return res.status(429).json({
       error: 'rate_limit',
-      message: 'Сағаттық шектеу бітті. Кейінірек қайталаңыз.',
+      message: msg(lang, 'rate_limit'),
     })
   }
 
   const { imageBase64, mimeType } = req.body || {}
-  const { status, body } = await transcribe({ imageBase64, mimeType })
+  const { status, body } = await transcribe({ imageBase64, mimeType, lang })
   res.status(status).json(body)
 })
 

@@ -4,7 +4,7 @@ import CameraPicker from './CameraPicker'
 
 const STATUS = { IDLE: 'idle', QUEUED: 'queued', WORKING: 'working', DONE: 'done', FAILED: 'failed' }
 
-export default function Archive({ t }) {
+export default function Archive({ t, lang }) {
   const [pages, setPages] = useState([])   // {id, name, preview, status, result, error}
   const [aiReady, setAiReady] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -65,7 +65,7 @@ export default function Archive({ t }) {
     const img = page?.img
     if (!img) {
       setPages((prev) => prev.map((p) => p.id === id
-        ? { ...p, status: STATUS.FAILED, error: 'Сурет жоғалды' } : p))
+        ? { ...p, status: STATUS.FAILED, error: t.archive.imageLost } : p))
       return
     }
 
@@ -74,10 +74,10 @@ export default function Archive({ t }) {
       const resp = await fetch('/api/transcribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageBase64: base64, mimeType }),
+        body: JSON.stringify({ imageBase64: base64, mimeType, lang }),
       })
       const data = await resp.json()
-      if (!resp.ok) throw new Error(data.message || 'Цифрлау сәтсіз')
+      if (!resp.ok) throw new Error(data.message || t.archive.failed)
 
       setPages((prev) => prev.map((p) => p.id === id
         ? { ...p, status: STATUS.DONE, result: data.result } : p))
@@ -118,8 +118,8 @@ export default function Archive({ t }) {
     setExporting(true)
     try {
       const { buildDocx, downloadBlob } = await loadExporter()
-      const blob = await buildDocx({ pages: done })
-      downloadBlob(blob, `murağat-${stamp()}.docx`)
+      const blob = await buildDocx({ pages: done, L: t.docx, blocks: t.archive.blocks })
+      downloadBlob(blob, `${t.archive.fileBase}-${stamp()}.docx`)
     } catch (e) {
       console.error('docx қатесі:', e)
     } finally {
@@ -130,15 +130,15 @@ export default function Archive({ t }) {
   async function exportTxt() {
     if (!done.length) return
     const { buildPlainText, downloadBlob } = await loadExporter()
-    downloadBlob(new Blob([buildPlainText({ pages: done })], { type: 'text/plain;charset=utf-8' }),
-      `murağat-${stamp()}.txt`)
+    downloadBlob(new Blob([buildPlainText({ pages: done, L: t.docx, blocks: t.archive.blocks })], { type: 'text/plain;charset=utf-8' }),
+      `${t.archive.fileBase}-${stamp()}.txt`)
   }
 
   async function copyText() {
     if (!done.length) return
     const { buildPlainText } = await loadExporter()
     try {
-      await navigator.clipboard.writeText(buildPlainText({ pages: done }))
+      await navigator.clipboard.writeText(buildPlainText({ pages: done, L: t.docx, blocks: t.archive.blocks }))
     } catch { /* рұқсат берілмеді */ }
   }
 
@@ -188,7 +188,7 @@ export default function Archive({ t }) {
             <p className="drop__title">{t.archive.dropTitle}</p>
             <p className="drop__hint">{t.archive.dropHint}</p>
             <div className="drop__camera" onClick={(e) => e.stopPropagation()}>
-              <CameraPicker onCapture={(f) => addFiles([f])} label={t.archive.camera} />
+              <CameraPicker t={t} onCapture={(f) => addFiles([f])} label={t.archive.camera} />
             </div>
           </div>
         ) : (
@@ -213,7 +213,7 @@ export default function Archive({ t }) {
             </div>
 
             <div className="archive__cam reveal">
-              <CameraPicker onCapture={(f) => addFiles([f])} label={t.archive.camera} compact />
+              <CameraPicker t={t} onCapture={(f) => addFiles([f])} label={t.archive.camera} compact />
             </div>
 
             <div className="archive__bar reveal">
@@ -298,13 +298,9 @@ export default function Archive({ t }) {
 
 /* ══════════════════════  Бір беттің нәтижесі  ══════════════════════ */
 
-const BLOCK_LABEL = {
-  heading: 'Тақырып', paragraph: 'Мәтін', date: 'Күні',
-  signature: 'Қолы', margin: 'Шет жақтағы белгі', table: 'Кесте',
-}
-
 function PageResult({ t, page, onEditBlock, onEditModern }) {
   const r = page.result
+  const BLOCK_LABEL = t.archive.blocks
   const conf = Math.round((r.confidence ?? 0) * 100)
 
   return (
@@ -326,7 +322,7 @@ function PageResult({ t, page, onEditBlock, onEditModern }) {
           <div className={`pr__block ${low ? 'is-low' : ''}`} key={i}>
             <div className="pr__blockhead">
               <span>{BLOCK_LABEL[b.type] || BLOCK_LABEL.paragraph}</span>
-              <span className={low ? 'is-low' : ''}>{c}%{b.edited ? ' · түзетілді' : ''}</span>
+              <span className={low ? 'is-low' : ''}>{c}%{b.edited ? ` · ${t.archive.edited}` : ''}</span>
             </div>
             <textarea
               className="pr__input"

@@ -1,0 +1,214 @@
+{
+ "kultegin-01": {
+  "atauy": "Kul Tigin monument",
+  "aimaq": "Orkhon Valley, Mongolia",
+  "jyl": "732",
+  "ashylgan": "Found by N. M. Yadrintsev in 1889, deciphered by V. Thomsen in 1893",
+  "meaning": "Heaven-like, Heaven-born Turkic Bilge Kagan — I have ascended this throne. Hear my words to the end: you, my younger brothers, my sons, my united clan, my people!",
+  "sipattama": "Kul Tigin was the younger brother of Bilge Kagan and a commander of the Second Turkic Kaganate. His elder brother erected the monument in 732. The stone is bilingual: one side is written in Old Turkic script, the other in Chinese."
+ },
+ "kultegin-02": {
+  "atauy": "Kul Tigin monument (full view)",
+  "aimaq": "Orkhon Valley, Mongolia",
+  "jyl": "732",
+  "ashylgan": "1889",
+  "meaning": "Bilge Kagan had it written. Kul Tigin's valour is carved in stone for ever.",
+  "sipattama": "The whole monument standing in the steppe. Height 3.15 m, granite. The kaganate's emblem is at the top."
+ },
+ "bilge-kagan-01": {
+  "atauy": "Bilge Kagan monument",
+  "aimaq": "Orkhon Valley, Mongolia",
+  "jyl": "735",
+  "ashylgan": "1889",
+  "meaning": "Turkic and Oghuz lords, people — hear me! Had the sky above not pressed down and the earth below not split open, O Turkic people, who could have destroyed your realm and your law?",
+  "sipattama": "Bilge Kagan (683–734) ruled the Second Turkic Kaganate. His son erected the monument in 735, 1 km from the Kul Tigin stone."
+ },
+ "tonyukuk-01": {
+  "atauy": "Tonyukuk monument",
+  "aimaq": "Bayn Tsokto, Tuul River, Mongolia",
+  "jyl": "716–726",
+  "ashylgan": "Found by E. N. Klements in 1897",
+  "meaning": "I, wise Tonyukuk, was myself brought up in the land of Tabgach (China). At that time the Turkic people were subject to Tabgach.",
+  "sipattama": "Tonyukuk was a commander and statesman who advised three kagans. He erected the monument himself during his lifetime, which is why the text is written in the first person."
+ },
+ "tonyukuk-02": {
+  "atauy": "Tonyukuk inscription (rubbing)",
+  "aimaq": "Bayn Tsokto, Mongolia",
+  "jyl": "716–726",
+  "ashylgan": "1897",
+  "meaning": "The Turkic people were subject to Tabgach (China). Finding no kagan of their own, the Turkic people broke away from Tabgach.",
+  "sipattama": "A rubbing taken from the surface of the stone — the signs are clearly visible. The best sample for checking the transliterator's accuracy."
+ },
+ "ongin-01": {
+  "atauy": "Ongin monument",
+  "aimaq": "Ongin River, Övörkhangai, Mongolia",
+  "jyl": "719–720",
+  "ashylgan": "N. M. Yadrintsev, 1891",
+  "meaning": "Our elder kinsman, our forefather Yamï Kagan conquered the peoples of the four corners of the world, gathered them and settled them.",
+  "sipattama": "A monument dedicated to the family of El Etmish Yabgu. The text opens by recalling the first rulers of the Turkic Kaganate."
+ },
+ "kuli-chor-01": {
+  "atauy": "Kuli Chor monument",
+  "aimaq": "Ikh-Khushuu, Mongolia",
+  "jyl": "723–725",
+  "ashylgan": "V. L. Kotvich, 1912",
+  "meaning": "The valour of Kuli Chor. At sixteen he became lord of the Tardush people.",
+  "sipattama": "Dedicated to the Turkic commander Kuli Chor. The text tells of his campaigns from his youth onwards."
+ },
+ "talas-01": {
+  "atauy": "Talas rock inscription",
+  "aimaq": "Talas Valley, Kyrgyzstan / Southern Kazakhstan",
+  "jyl": "8th–10th centuries",
+  "ashylgan": "From 1896 — V. A. Kallaur, H. Heikel",
+  "meaning": "My son was a man, he was valiant. I am thirty years old; I have not had my fill of my land.",
+  "sipattama": "The Talas inscriptions are the western group of runic monuments in Central Asia. Their sign shapes differ from the Orkhon ones, so they are treated separately as the \"Talas variant\"."
+ },
+ "suji-01": {
+  "atauy": "Suji inscription",
+  "aimaq": "Suji, Northern Mongolia",
+  "jyl": "c. 840",
+  "ashylgan": "G. J. Ramstedt, 1900",
+  "meaning": "I am a son of the Kyrgyz. In the Uyghur land I came to Yaglakar Khan.",
+  "sipattama": "The monument dates from the time when the Kyrgyz Kaganate defeated the Uyghur Kaganate. G. J. Ramstedt published it in 1913."
+ },
+ "irk-bitig-01": {
+  "atauy": "Irk Bitig (\"Book of Omens\")",
+  "aimaq": "Dunhuang, Mogao Caves, China",
+  "jyl": "c. 930",
+  "ashylgan": "Found by Aurel Stein in 1907",
+  "meaning": "\"I am a golden-winged eagle,\" it says. Know that this is good.",
+  "sipattama": "The only fully preserved manuscript book in Old Turkic — 65 pages, 65 omens. Written on paper rather than stone. Now kept in the British Library."
+ },
+ "yenisei-01": {
+  "atauy": "Yenisei stele (Minusinsk)",
+  "aimaq": "Minusinsk Basin, Yenisei, Siberia",
+  "jyl": "7th–10th centuries",
+  "ashylgan": "From the 18th century — D. G. Messerschmidt, P. J. von Strahlenberg",
+  "meaning": "I have been parted from my land and my wife. I did not see the sun or the moon — alas, this world.",
+  "sipattama": "The Yenisei inscriptions are the oldest group of runic monuments; more than 150 have been found. Most stood on graves, and their texts read like farewell songs."
+ },
+ "qazaqstan-soz": {
+  "atauy": "\"Kazakhstan\" newspaper, No. 1",
+  "aimaq": "Khan's Horde, Bukey Horde",
+  "jyl": "16 March 1911",
+  "meaning": "\"Qazaqstan\" (Kazakhstan) was one of the first newspapers in the Kazakh language. Its first issue came out on 16 March 1911.",
+  "sipattama": "The newspaper's title is set in large Tote type and repeated below in Russian as \"КАЗАКСТАНЪ\", which makes this image ideal for checking the transliteration."
+ },
+ "qazaq-gazeti-01": {
+  "atauy": "Emblem of the \"Qazaq\" newspaper",
+  "aimaq": "Orenburg",
+  "jyl": "1913–1918",
+  "meaning": "\"Qazaq\" was a national newspaper edited by Akhmet Baitursynuly.",
+  "sipattama": "The emblem combines a picture of a yurt with the word \"قازاق\". The newspaper was published by Akhmet Baitursynuly and Mirzhakyp Dulatuly."
+ },
+ "qazaq-gazeti-02": {
+  "atauy": "\"Qazaq\" newspaper, 1915",
+  "aimaq": "Orenburg",
+  "jyl": "1915",
+  "meaning": "An issue of the \"Qazaq\" newspaper from 1915.",
+  "sipattama": "The newspaper ran from 1913 to 1918 and was the main platform of the Kazakh intelligentsia."
+ },
+ "kazakh-1902": {
+  "atauy": "Kazakh text, 1902 (with parallel transcription)",
+  "aimaq": "Russian Empire, Kazakh steppe",
+  "jyl": "1902",
+  "meaning": "Long ago a wise man came and stayed the night at the house of a great kadi of the city of Baghdad. The kadi talked with him and kept losing the argument.",
+  "sipattama": "The most valuable sample: Tote script on the left and a transcription from the same period on the right. The transliterator can be checked against it directly."
+ },
+ "kenesary-hat": {
+  "atauy": "Letter of Sultan Kenesary",
+  "aimaq": "Saryarka",
+  "jyl": "mid-19th century",
+  "meaning": "A letter by Kenesary Kasymuly written in Arabic script.",
+  "sipattama": "An example of Arabic script under the older Chagatai influence, before Baitursynuly's reform. Useful for comparison with Tote script."
+ },
+ "abai-jinaq-01": {
+  "atauy": "Abai's first collection",
+  "aimaq": "Saint Petersburg",
+  "jyl": "1909",
+  "meaning": "The first collection of Abai Kunanbaiuly's poems, printed in Arabic script in Saint Petersburg in 1909.",
+  "sipattama": "Abai's first printed book. It was published after the poet's death by his nephew Kakitai Iskakuly."
+ },
+ "qazaq-alippesi": {
+  "atauy": "\"The New Kazakh Alphabet\" (Latin + Tote)",
+  "aimaq": "Kazakhstan",
+  "jyl": "1929",
+  "meaning": "A primer from the transition to the Latin alphabet: under each Latin letter its Tote equivalent is given.",
+  "sipattama": "The page heading is in Latin script: \"qazaqtьꞑ çaꞑa əlipbesi\". Each letter appears in three forms: printed Latin, handwritten Latin and Tote. Source: Askarbekova N. M., Zamzaeva T. A. Catalogue of Kazakh books printed in Latin script (1928–1941). Almaty, 2007."
+ },
+ "eski-qazaq-jazuy": {
+  "atauy": "Kazakh text, 1902 (vertical layout)",
+  "aimaq": "Kazakhstan",
+  "jyl": "early 20th century",
+  "meaning": "The kadi talked with him and kept losing the argument. Then the kadi grew afraid: \"This is trouble come upon me: he will surely take my post as kadi!\" — and went to consult his wife.",
+  "sipattama": "Tote script above and a transcription from the same period below. It is the same text as the kazakh-1902 entry but from a different page: here the story continues."
+ },
+ "baitursynuly-01": {
+  "atauy": "Table of the Tote alphabet",
+  "aimaq": "Kazakhstan",
+  "jyl": "1912 reform",
+  "meaning": "The 33 signs of the Tote script reformed by Akhmet Baitursynuly and their equivalents in today's Cyrillic alphabet.",
+  "sipattama": "This table became the basis of the project's Tote transliterator — the letter correspondences were checked against this very image."
+ },
+ "shakarim-1912": {
+  "atauy": "Photograph of Shakarim Kudaiberdiuly",
+  "aimaq": "Semey (Semipalatinsk)",
+  "jyl": "1912",
+  "ashylgan": "K. N. Moshlevich photo studio, Semipalatinsk",
+  "meaning": "A photograph of Shakarim Kudaiberdiuly taken in Semipalatinsk in 1912. On the back there is a handwritten dedication and date in Arabic script.",
+  "sipattama": "A genuine historical document: the inscription on the back is handwritten, so reading it fully requires palaeographic analysis. The date 1912 is clearly visible. The entry is in the base as a document of its era, not as a text sample."
+ },
+ "thomsen-table": {
+  "atauy": "V. Thomsen's comparative table",
+  "aimaq": "Copenhagen, Denmark",
+  "jyl": "1893",
+  "ashylgan": "The year V. Thomsen deciphered the Old Turkic script",
+  "meaning": "Vilhelm Thomsen's table comparing the signs of the Orkhon and Yenisei inscriptions — a record of the moment the Old Turkic script was deciphered.",
+  "sipattama": "In 1893 the Danish scholar V. Thomsen was the first to read the Old Turkic runes. The table has separate \"Orkh.\" (Orkhon) and \"Iénisséi\" (Yenisei) columns — the structure of the site's Alphabet section is taken from it."
+ },
+ "abulkhair-1732": {
+  "atauy": "Letter of Abulkhair Khan",
+  "aimaq": "Junior Juz",
+  "jyl": "1732",
+  "derek": "Facsimile of an archival document",
+  "license": "Transcription and translation: project author",
+  "sipattama": "A letter from Abulkhair, khan of the Junior Juz, to the Russian Tsar, sent through the interpreter Mukhammed Tevkelev (A. I. Tevkelev). Written in Chagatai (Turki) in Arabic script.",
+  "meaning": "A petition to His Majesty the mighty and powerful great Emperor, to all the governors of the western and eastern lands of Russia and to all the nobles of the Tsar. We have understood the content of your letter sent from His Majesty the Tsar through Mukhammed Mirza Tevkelev, and Mukhammed Mirza has also conveyed to us by word of mouth the command of His Majesty the Emperor. We, Abulkhair Khan, together with all our Kazakh host, have accepted to be subjects of Your Majesty, the great Tsar and Emperor. Earlier, in 1732, we had already sent our petition to His Majesty the great Tsar through our envoy Beke Batyr, and now we make our request in Russian. The Kalmyk ruler stirred up great unrest among our people, and our Kazakh people are as wilful as the saiga. My own people rose against me. My people went one way and I was left on my own. Your envoy Mukhammed Mirza is witness to this. As long as there is life in my breast, I shall not go against the commands of Your Majesty the great Emperor. As long as a drop of blood remains in me, I shall obey your command. I stand by my oath and my promise. This is my petition and my tears to His Majesty the great Emperor. The people who stand by me bow their heads and submit to Your Majesty the great Tsar, and from every clan they have sent envoys from among respected men with Mukhammed Mirza Tevkelev. Those who do not obey me I cannot restrain. Therefore take me under your protection. Your envoy Mukhammed Mirza knows the truth of my words and my loyalty to Your Majesty the great Tsar. In this undertaking, apart from the one God and then from you, the great Tsar, I hope for help from no one else."
+ },
+ "abylai-1745": {
+  "atauy": "Letter of Sultan Abylai",
+  "aimaq": "Middle Juz",
+  "jyl": "1745",
+  "derek": "Facsimile of an archival document",
+  "license": "Transcription and translation: project author",
+  "sipattama": "A letter from Sultan Abylai to the Siberian governor A. M. Sukharev. Written in Chagatai (Turki) in Arabic script.",
+  "meaning": "To the most honoured and mighty, merciful to all, General Aleksei Mikhailovich Sukharev, servant of His Majesty the great Tsar, from me, Sultan Abylai — greetings and prayers. We here, thank God, are alive and well. May you too be alive and well. We wish to tell you: there is a people here called the Uysun who are opposing the Tsar. They have gained nothing from opposing the Tsar's realm while caught between the Kalmyks and the Kazakhs. Here they could not join the Kazakhs, and there they could not join the Russians. They ask forgiveness for their past offences. The head of three hundred households has said that they will submit to the Tsar. What will your decision be — will you tell them to submit to the Tsar, or tell them not to? The exact answer is known to you, General Aleksei Mikhailovich. The people will obey your command. One of them, Baizhigit — his father's name is Zhaulybai and his elder brother's name is Ibash — is held in prison in the town of Tobolsk. General Aleksei Mikhailovich, please release this man from prison because he has bowed his head and submitted to the Tsar. If you release him, please also send back without delay Esdaulet Shafauly and Bozdak Esenamanuly, whom we sent."
+ },
+ "syrym-1790": {
+  "atauy": "Complaint of Syrym Datuly",
+  "aimaq": "Junior Juz, Baiuly tribe",
+  "jyl": "1790",
+  "derek": "Facsimile of an archival document",
+  "license": "Transcription and translation: project author",
+  "sipattama": "A complaint to Catherine II from Syrym Datuly, chief elder of the Baiuly tribe, about the actions of the Ural ataman Donskov. Written in Chagatai (Turki) in Arabic script.",
+  "meaning": "A petition to His Majesty the mighty and powerful King of Kings from Tarkhan Syrym Datuly, chief elder of the Baiuly tribe of the Kyrgyz-Kazakhs of the Junior Juz.\nThe Kyrgyz-Kazakh people of the Junior Juz had agreed to become subjects. In the time of Lieutenant General, Knight, Baron Osip Andreevich Igelström, all was well. After him, however, your honourable general, the ataman of the Ural fortress (stronghold, town) Danila Donskov, inflicted much injury and oppression on the Kyrgyz-Kazakh subjects.\nMighty and powerful King of Kings, Your Majesty, on learning of this unrest in the land, you sent by your command the mufti Mukhamedzhan Khusainuly and Bekshorauly to look into the condition of your subject people. After the authorities had admonished and persuaded the Kyrgyz-Kazakh subjects at length, the ataman of the Ural fortress Danila Donskov came with fifteen hundred soldiers, innocently raided and ruined two hundred and twenty-five households of your Kazakh and Kyrgyz subjects, took all their livestock, killed one hundred and fifty people and carried off fifty-seven people alive. The horses, camels and cattle taken are beyond counting. For the peace of the small Kyrgyz-Kazakh people of the Junior Juz, we hope that you will send Lieutenant General, Knight, Baron Igelström to these parts. If not Osip Andreevich, then do not hand the small subject people over to Danila, who will destroy them.\nChief elder of the Baiuly tribe of the Kyrgyz-Kazakh people of the Junior Juz, Tarkhan Syrym Batyr Datuly. I have set my seal.\nThe year 1790, Syrym ibn Dat. The 11th day of the month of Mizan."
+ },
+ "makhambet-1839": {
+  "atauy": "Letter of Makhambet Utemisuly",
+  "aimaq": "Khiva",
+  "jyl": "1839",
+  "derek": "Facsimile of an archival document",
+  "license": "Transcription and translation: project author",
+  "sipattama": "A letter of greeting from Makhambet Utemisuly in Khiva to the batyrs of the Junior Juz. Written in Chagatai (Turki) in Arabic script.",
+  "meaning": "Honoured batyrs Baubek, Nadirkul, Sali, Yarmukhamed and Amantai, I send my greetings to all of you alike. God willing, we shall return safe and sound from our journey to Khiva; you will learn the details from Zharas. I myself long to see you, but because of my difficult situation I could not come, and I cannot stay among these people either. This year without fail I will gather troops and meet the khan. If you have the opportunity, send Elder Sali to me. I too am waiting for news from you. Do not think that no troops will come out of Khiva. If the Russians make trouble for you, move your camps over here. The Nazar people will not touch your livestock. Never let yourselves be humiliated before a Russian official. Today Gaibulla Khan, who keeps the unruly Adai in check and collects their zakat, has a good number of troops. You probably know yourselves that this year Allakuli Khan took neither duty nor zakat from the people visited by the Alasha with Mullah Zharylgas and Otynshy Bi. That same autumn the batyrs who came from Khiva raided sixty-two Alasha households. Allakuli Khan intended to send men to recover that livestock too. The Tleu people also gathered up their own livestock and brought it back. We said that the people who left the Russians are not without honour and that you are at one with us. Allakuli Khan was pleased. What more shall I write — know that it is your younger brother Mukhammed, son of Utemis, who writes. My friends Sali and Zharmukhammed, if you have time, it would be very good if you could buy and send us the tea and sugar we badly need."
+ },
+ "ybyrai-1883": {
+  "atauy": "Letter of Ibrai Altynsarin",
+  "aimaq": "Turgai Region",
+  "jyl": "1883",
+  "derek": "Facsimile of an archival document",
+  "license": "Transcription and translation: project author",
+  "sipattama": "A letter from Ibrai Altynsarin to Bayadil Keikin about school matters. Written in a late form of Chagatai (Turki) in Arabic script.",
+  "meaning": "Greetings to our dear elder brother Baieke\nThank God, we are alive and well. The snow here is thin and the livestock are fat, but there is sickness among both livestock and people. Measles has spread among the people, and cows and camels are dying among the livestock. I recently sent a letter to the teacher Mazokhin. The mullahs have been trying to drive Baktybai out of the house he lives in. This year, while I was at the school, Baktybai said he would live with his acquaintances, and I told him: \"Stay in this flat, because if teachers do not live nearby it will be hard for them to get there in blizzards and snowstorms.\" And when the school opened last year, I warned you myself, by word of mouth, more than once that the house where Baktybai lives would eventually be needed by the school. If permission is given to turn the madrasa premises into a school, it will in time become impossible to open schools anywhere else. In the same way, if every mullah and Kazakh keeps coming to obstruct and harass the teachers, it will be hard for the school to work steadily. Therefore I ask you earnestly: whoever is behind such high-handedness, please forbid it. The mullahs reportedly say they need the children to teach as shakirds. But on inquiry it turns out there are no pupils who want to go and study at the madrasa. This shows that the opposition to the school is being organised on purpose. If they do not heed your word, please report it quickly to the proper authorities and let me know. Please save the teachers from being harassed and insulted by anyone at all. Before speaking to other people, I wanted to turn to you first and warn you, which is why I trouble you with this letter — please do not hold it against me.\nYour servant Ibrahim Altynsarin, who hopes for your help. Written on 28 January."
+ }
+}

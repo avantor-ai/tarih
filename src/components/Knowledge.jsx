@@ -2,11 +2,10 @@ import { useMemo, useState, useEffect, useRef } from 'react'
 import monuments from '../data/monuments.json'
 import runicAlphabet from '../data/alphabet-runic.json'
 import toteAlphabet from '../data/alphabet-tote.json'
+import { localizeMonument } from '../lib/localize'
 
 const TABS = ['all', 'runic', 'tote', 'chagatai', 'alphabet']
 
-/** Жазу түрінің қысқа белгісі (карточкада) */
-const TYPE_LABEL = { runic: 'көне түркі', tote: 'төте жазу', chagatai: 'шағатай' }
 
 /** Карточкадағы үлгі мәтін: руника/араб таңбалары, шағатайда — транскрипция басы */
 const sampleText = (m) =>
@@ -15,7 +14,7 @@ const sampleText = (m) =>
 const sampleClass = (m) =>
   m.type === 'runic' ? 'runic' : m.type === 'chagatai' ? 'card__script--text' : 'arabic'
 
-export default function Knowledge({ t }) {
+export default function Knowledge({ t, lang }) {
   const [tab, setTab] = useState('all')
   const [open, setOpen] = useState(null)
   // Бөлім әдепкіде жиулы тұрады — сайт тым ұзын болмас үшін
@@ -46,9 +45,14 @@ export default function Knowledge({ t }) {
   }, [])
 
   const items = useMemo(() => {
-    if (tab === 'all') return monuments.items
-    return monuments.items.filter((m) => m.type === tab)
-  }, [tab])
+    const list = tab === 'all' ? monuments.items : monuments.items.filter((m) => m.type === tab)
+    return list.map((m) => localizeMonument(m, lang))
+  }, [tab, lang])
+
+  const openItem = useMemo(() => {
+    const raw = open && monuments.items.find((m) => m.id === open)
+    return raw ? localizeMonument(raw, lang) : null
+  }, [open, lang])
 
   // Esc — жабу
   useEffect(() => {
@@ -123,10 +127,10 @@ export default function Knowledge({ t }) {
         ) : (
           <div className="cards">
             {items.map((m) => (
-              <button className="card reveal" key={m.id} onClick={() => setOpen(m)}>
+              <button className="card reveal" key={m.id} onClick={() => setOpen(m.id)}>
                 <div className="card__img">
                   <img src={m.image} alt={m.atauy} loading="lazy" />
-                  <span className="card__type">{TYPE_LABEL[m.type]}</span>
+                  <span className="card__type">{t.knowledge.typeShort[m.type]}</span>
                 </div>
                 <div className="card__body">
                   <h3 className="card__title">{m.atauy}</h3>
@@ -146,14 +150,14 @@ export default function Knowledge({ t }) {
         )}
       </div>
 
-      {open && <Detail t={t} m={open} onClose={() => setOpen(null)} />}
+      {openItem && <Detail t={t} lang={lang} m={openItem} onClose={() => setOpen(null)} />}
     </section>
   )
 }
 
 /* ══════════════════════  Ескерткіш картасы  ══════════════════════ */
 
-function Detail({ t, m, onClose }) {
+function Detail({ t, lang, m, onClose }) {
   return (
     <div className="modal" onClick={onClose}>
       <div className="modal__box scrollbar-thin" onClick={(e) => e.stopPropagation()}>
@@ -170,7 +174,8 @@ function Detail({ t, m, onClose }) {
               {{ runic: t.knowledge.tabRunic, tote: t.knowledge.tabTote, chagatai: t.knowledge.tabChagatai }[m.type]}
             </p>
             <h3>{m.atauy}</h3>
-            <p className="modal__ru">{m.atauy_ru}</p>
+            {/* Қазақшада — орысша атауы, басқа тілде — түпнұсқа қазақша атауы */}
+            <p className="modal__ru">{lang === 'kk' ? m.atauy_ru : m.atauy_kk}</p>
 
             <dl className="facts">
               <div><dt>{t.knowledge.region}</dt><dd>{m.aimaq}</dd></div>
@@ -186,14 +191,14 @@ function Detail({ t, m, onClose }) {
                 </div>
                 <div className="modal__script">
                   <span className="field__label">{t.translator.translation}</span>
-                  <div className="modal__kazakh modal__longtext">{m.tolyq_kazakh}</div>
+                  <div className="modal__kazakh modal__longtext">{m.meaning}</div>
                 </div>
               </>
             ) : (
             <>
             <div className="modal__script">
               <span className="field__label">
-                {m.type === 'runic' ? 'Таңбалар' : 'Төте жазумен'}
+                {m.type === 'runic' ? t.knowledge.signs : t.knowledge.inTote}
               </span>
               <div className={m.type === 'runic' ? 'runic' : 'arabic'}>
                 {m.type === 'runic' ? m.runic : m.arab}
@@ -202,14 +207,14 @@ function Detail({ t, m, onClose }) {
 
             {m.latin && (
               <div className="modal__script">
-                <span className="field__label">Латын транслитерациясы</span>
+                <span className="field__label">{t.knowledge.latin}</span>
                 <div className="latin-translit">{m.latin}</div>
               </div>
             )}
 
             <div className="modal__script">
-              <span className="field__label">Қазіргі қазақ тілінде</span>
-              <div className="modal__kazakh">{m.tolyq_kazakh}</div>
+              <span className="field__label">{t.knowledge.meaning}</span>
+              <div className="modal__kazakh">{m.meaning}</div>
             </div>
             </>
             )}
@@ -253,7 +258,7 @@ function AlphabetTables({ t }) {
           </div>
         </div>
 
-        <p className="alphabet__note">{runicAlphabet.eskertu}</p>
+        <p className="alphabet__note">{t.knowledge.runicNote}</p>
 
         <SignGroup title={t.knowledge.vowels} signs={groups.dauysty} kind="runic" />
         <SignGroup title={t.knowledge.consonants} signs={groups.dauyssyz} kind="runic" />
@@ -265,9 +270,9 @@ function AlphabetTables({ t }) {
           <h3>{t.knowledge.alphabetTote}</h3>
         </div>
         <p className="alphabet__note">
-          {toteAlphabet.avtor} · {toteAlphabet.qoldanys}
+          {t.knowledge.toteAuthor} · {t.knowledge.toteUsage}
         </p>
-        <p className="alphabet__note">{toteAlphabet.erekshelik}</p>
+        <p className="alphabet__note">{t.knowledge.toteFeature}</p>
 
         <div className="signs">
           {toteAlphabet.signs.map((s) => (

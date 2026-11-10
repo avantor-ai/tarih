@@ -18,6 +18,8 @@
  * кілт әрқашан бос болып шығады. Vercel-де айнымалылар процесс
  * басталғанға дейін қойылады, сондықтан ол жақта бәрібір.
  */
+import { msg, normLang, answerLanguageRule } from './i18n.js'
+
 const cfg = () => ({
   provider: process.env.AI_PROVIDER || 'gemini',
   model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
@@ -32,7 +34,7 @@ const aiEnabled = () => process.env.AI_ENABLED !== 'false' && Boolean(cfg().key)
 
 const MAX_IMAGE_BYTES = 6 * 1024 * 1024 // base64 күйіндегі шек
 
-export const PROMPT = `Сен — көне түркі жазуын, қазақ төте жазуын және шағатай (түркі) тіліндегі
+export const PROMPT_KK = `Сен — көне түркі жазуын, қазақ төте жазуын және шағатай (түркі) тіліндегі
 араб графикалы құжаттарды оқитын маман-эпиграфист әрі палеографсың.
 
 Суреттегі жазуды талда. Жауапты ТЕК таза JSON түрінде бер, басқа мәтін қоспа:
@@ -68,6 +70,11 @@ export const PROMPT = `Сен — көне түркі жазуын, қазақ �
 - Шағатай мәтінін аударғанда мағынасын бер, сөзбе-сөз емес; есімдерді өзгертпе.
 - Оқылмаған жерді […] деп қалдыр, ойдан құрастырма: confidence-ті төмен қой және notes-та түсіндір.
 - Егер суретте жазу мүлде болмаса: script="other", confidence=0.`
+
+/** Промпт + таңдалған жауап тілі (аудармасы мен ескертпелері сол тілде) */
+export function promptFor(lang) {
+  return PROMPT_KK + answerLanguageRule(lang, ['translation', 'notes', 'monument'], ['signs', 'latin', 'kazakh', 'transcription'])
+}
 
 /* ─────────────────────────  Денсаулық  ───────────────────────── */
 
@@ -112,19 +119,20 @@ export function rateLimit(ip) {
 /* ────────────────────────  Танып оқу  ───────────────────────── */
 
 /**
- * @param {{imageBase64: string, mimeType?: string}} input
+ * @param {{imageBase64: string, mimeType?: string, lang?: string}} input
  * @returns {Promise<{status: number, body: object}>}
  */
-export async function recognize({ imageBase64, mimeType }) {
+export async function recognize({ imageBase64, mimeType, lang: rawLang }) {
+  const lang = normLang(rawLang)
   if (!aiEnabled()) {
     return {
       status: 503,
-      body: { error: 'ai_disabled', message: getHealth().message },
+      body: { error: 'ai_disabled', message: msg(lang, cfg().key ? 'ai_flag_off' : 'no_key') },
     }
   }
 
   if (!imageBase64) {
-    return { status: 400, body: { error: 'no_image', message: 'Сурет жіберілмеді' } }
+    return { status: 400, body: { error: 'no_image', message: msg(lang, 'no_image') } }
   }
 
   if (imageBase64.length > MAX_IMAGE_BYTES) {
@@ -132,7 +140,7 @@ export async function recognize({ imageBase64, mimeType }) {
       status: 413,
       body: {
         error: 'too_large',
-        message: 'Сурет тым үлкен. Кішірейтіп қайта жіберіңіз.',
+        message: msg(lang, 'too_large'),
       },
     }
   }
@@ -143,15 +151,15 @@ export async function recognize({ imageBase64, mimeType }) {
       status: 501,
       body: {
         error: 'unknown_provider',
-        message: `AI_PROVIDER="${provider}" әлі қосылмаған. Қазір тек "gemini" бар.`,
+        message: msg(lang, 'unknown_provider'),
       },
     }
   }
 
-  return recognizeWithGemini({ imageBase64, mimeType })
+  return recognizeWithGemini({ imageBase64, mimeType, lang })
 }
 
-async function recognizeWithGemini({ imageBase64, mimeType }) {
+async function recognizeWithGemini({ imageBase64, mimeType, lang }) {
   const { model, key } = cfg()
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`
 
@@ -163,7 +171,7 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
       body: JSON.stringify({
         contents: [{
           parts: [
-            { text: PROMPT },
+            { text: promptFor(lang) },
             { inline_data: { mime_type: mimeType || 'image/jpeg', data: imageBase64 } },
           ],
         }],
@@ -181,7 +189,7 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
   } catch (err) {
     return {
       status: 502,
-      body: { error: 'network', message: 'Gemini-ге қосыла алмадық: ' + err.message },
+      body: { error: 'network', message: msg(lang, 'network') + ': ' + err.message },
     }
   }
 
@@ -193,9 +201,7 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
       body: {
         error: 'upstream',
         status: upstream.status,
-        message: upstream.status === 429
-          ? 'Gemini лимиті бітті — біраздан кейін қайталаңыз'
-          : 'Gemini жауап бермеді',
+        message: upstream.status === 429 ? msg(lang, 'quota') : msg(lang, 'upstream'),
       },
     }
   }
@@ -207,7 +213,7 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
   if (candidate?.finishReason === 'MAX_TOKENS') {
     return {
       status: 502,
-      body: { error: 'truncated', message: 'Жауап толық сыймады. Қайталап көріңіз.' },
+      body: { error: 'truncated', message: msg(lang, 'truncated') },
     }
   }
 
@@ -224,7 +230,7 @@ async function recognizeWithGemini({ imageBase64, mimeType }) {
       status: 502,
       body: {
         error: 'parse',
-        message: 'Модельдің жауабын оқу мүмкін болмады',
+        message: msg(lang, 'parse'),
         raw: text.slice(0, 500),
       },
     }

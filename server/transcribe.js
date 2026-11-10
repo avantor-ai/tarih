@@ -12,6 +12,8 @@
 
 // Баптаулар модуль жүктелгенде емес, шақырылғанда оқылады —
 // себебі recognize.js-тегідей (ES импорттары dotenv-тен бұрын жүреді).
+import { msg, normLang, answerLanguageRule } from './i18n.js'
+
 const cfg = () => ({
   provider: process.env.AI_PROVIDER || 'gemini',
   model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
@@ -58,36 +60,40 @@ export const TRANSCRIBE_PROMPT = `Сен — мұрағат құжаттарын
 - Әр блокқа өз confidence мәнін қой: анық оқылса жоғары, күмәнді болса төмен.
 - Суретте құжат болмаса немесе мәтін мүлде оқылмаса: blocks бос, confidence 0.`
 
+/** Промпт + таңдалған жауап тілі: қазіргі оқылымы, түйіні мен ескертпелері сол тілде */
+export function transcribePromptFor(lang) {
+  return TRANSCRIBE_PROMPT + answerLanguageRule(lang, ['modern', 'summary', 'notes', 'docType'], ['blocks[].text', 'blocks[].uncertain'])
+}
+
 export function getTranscribeHealth() {
   const { provider, model } = cfg()
   return { ok: true, provider, aiReady: aiEnabled(), model }
 }
 
 /**
- * @param {{imageBase64: string, mimeType?: string}} input
+ * @param {{imageBase64: string, mimeType?: string, lang?: string}} input
  * @returns {Promise<{status: number, body: object}>}
  */
-export async function transcribe({ imageBase64, mimeType }) {
+export async function transcribe({ imageBase64, mimeType, lang: rawLang }) {
+  const lang = normLang(rawLang)
   if (!aiEnabled()) {
     return {
       status: 503,
       body: {
         error: 'ai_disabled',
-        message: cfg().key
-          ? 'Цифрлау режимі әдейі өшірілген (AI_ENABLED=false)'
-          : 'API кілті табылмады — цифрлау үшін кілт қажет',
+        message: msg(lang, cfg().key ? 'ai_flag_off' : 'no_key'),
       },
     }
   }
 
   if (!imageBase64) {
-    return { status: 400, body: { error: 'no_image', message: 'Сурет жіберілмеді' } }
+    return { status: 400, body: { error: 'no_image', message: msg(lang, 'no_image') } }
   }
 
   if (imageBase64.length > MAX_IMAGE_BYTES) {
     return {
       status: 413,
-      body: { error: 'too_large', message: 'Бет тым үлкен. Кішірейтіп қайта жіберіңіз.' },
+      body: { error: 'too_large', message: msg(lang, 'too_large') },
     }
   }
 
@@ -97,7 +103,7 @@ export async function transcribe({ imageBase64, mimeType }) {
       status: 501,
       body: {
         error: 'unknown_provider',
-        message: `AI_PROVIDER="${provider}" әлі қосылмаған.`,
+        message: msg(lang, 'unknown_provider'),
       },
     }
   }
@@ -112,7 +118,7 @@ export async function transcribe({ imageBase64, mimeType }) {
       body: JSON.stringify({
         contents: [{
           parts: [
-            { text: TRANSCRIBE_PROMPT },
+            { text: transcribePromptFor(lang) },
             { inline_data: { mime_type: mimeType || 'image/jpeg', data: imageBase64 } },
           ],
         }],
@@ -132,7 +138,7 @@ export async function transcribe({ imageBase64, mimeType }) {
   } catch (err) {
     return {
       status: 502,
-      body: { error: 'network', message: 'Gemini-ге қосыла алмадық: ' + err.message },
+      body: { error: 'network', message: msg(lang, 'network') + ': ' + err.message },
     }
   }
 
@@ -144,9 +150,7 @@ export async function transcribe({ imageBase64, mimeType }) {
       body: {
         error: 'upstream',
         status: upstream.status,
-        message: upstream.status === 429
-          ? 'Gemini лимиті бітті — біраздан кейін қайталаңыз'
-          : 'Gemini жауап бермеді',
+        message: upstream.status === 429 ? msg(lang, 'quota') : msg(lang, 'upstream'),
       },
     }
   }
@@ -160,8 +164,7 @@ export async function transcribe({ imageBase64, mimeType }) {
       status: 502,
       body: {
         error: 'truncated',
-        message: 'Бет тым көлемді — жауап толық сыймады. '
-          + 'Бетті екіге бөліп немесе жеке бөліктерін жүктеп көріңіз.',
+        message: msg(lang, 'truncated_page'),
       },
     }
   }
@@ -177,7 +180,7 @@ export async function transcribe({ imageBase64, mimeType }) {
   if (!parsed) {
     return {
       status: 502,
-      body: { error: 'parse', message: 'Модельдің жауабын оқу мүмкін болмады', raw: text.slice(0, 500) },
+      body: { error: 'parse', message: msg(lang, 'parse'), raw: text.slice(0, 500) },
     }
   }
 

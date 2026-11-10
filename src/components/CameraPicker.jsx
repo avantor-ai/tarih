@@ -11,14 +11,15 @@ import { useCameras, cameraLabel, cameraErrorText } from '../lib/useCameras'
  * @param {(file: File) => void} onCapture  түсірілген кадр
  * @param {string} label  батырманың жазуы
  */
-export default function CameraPicker({ onCapture, label = 'Камерамен түсіру', compact = false }) {
+export default function CameraPicker({ t, onCapture, label, compact = false }) {
+  const L = t.camera
   const { devices, deviceId, select, permission, error, supported, requestAccess } = useCameras()
   const [open, setOpen] = useState(false)
 
   if (!supported) {
     return (
       <p className="cam__unsupported">
-        Бұл браузер камераны қолдамайды. Суретті файл ретінде жүктеңіз.
+        {L.unsupported}
       </p>
     )
   }
@@ -29,7 +30,7 @@ export default function CameraPicker({ onCapture, label = 'Камерамен т
     <div className={`cam ${compact ? 'cam--compact' : ''}`}>
       <div className="cam__row">
         <label className="cam__field">
-          <span className="cam__label">Камера</span>
+          <span className="cam__label">{L.label}</span>
           <select
             className="cam__select"
             value={deviceId}
@@ -39,18 +40,18 @@ export default function CameraPicker({ onCapture, label = 'Камерамен т
             {devices.length ? (
               devices.map((d, i) => (
                 <option key={d.deviceId || i} value={d.deviceId}>
-                  {cameraLabel(d, i)}
+                  {cameraLabel(d, i, L.label)}
                 </option>
               ))
             ) : (
-              <option value="">камера табылмады</option>
+              <option value="">{L.none}</option>
             )}
           </select>
         </label>
 
         {needsAccess ? (
           <button className="btn btn--ghost cam__btn" onClick={requestAccess}>
-            Камераға рұқсат беру
+            {L.allow}
           </button>
         ) : (
           <button className="btn btn--ghost cam__btn" onClick={() => setOpen(true)}>
@@ -59,13 +60,14 @@ export default function CameraPicker({ onCapture, label = 'Камерамен т
         )}
       </div>
 
-      {error && <p className="cam__error">{error}</p>}
+      {error && <p className="cam__error">{cameraErrorText(error, L)}</p>}
       {permission === 'granted' && devices.length > 1 && (
-        <p className="cam__hint">Табылған камера: {devices.length}</p>
+        <p className="cam__hint">{L.found}: {devices.length}</p>
       )}
 
       {open && (
         <CaptureModal
+          L={L}
           deviceId={deviceId}
           devices={devices}
           onSelectDevice={select}
@@ -79,7 +81,7 @@ export default function CameraPicker({ onCapture, label = 'Камерамен т
 
 /* ══════════════════════  Тірі көрініс  ══════════════════════ */
 
-function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture }) {
+function CaptureModal({ L, deviceId, devices, onSelectDevice, onClose, onCapture }) {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
   const [err, setErr] = useState(null)
@@ -107,7 +109,7 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
           v.play?.().catch(() => {})
         }
       } catch (e) {
-        if (!cancelled) setErr(cameraErrorText(e))
+        if (!cancelled) setErr({ name: e?.name, message: e?.message })
       }
     }
 
@@ -149,11 +151,11 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
   return createPortal(
     <div className="cammodal" onClick={onClose}>
       <div className="cammodal__box" onClick={(e) => e.stopPropagation()}>
-        <button className="cammodal__close" onClick={onClose} aria-label="Жабу">×</button>
+        <button className="cammodal__close" onClick={onClose} aria-label={L.close}>×</button>
 
         <div className="cammodal__stage">
           {err ? (
-            <p className="cammodal__error">{err}</p>
+            <p className="cammodal__error">{cameraErrorText(err, L)}</p>
           ) : (
             <video
               ref={videoRef}
@@ -166,7 +168,7 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
               }}
             />
           )}
-          {!err && !ready && <p className="cammodal__loading">Камера қосылуда…</p>}
+          {!err && !ready && <p className="cammodal__loading">{L.starting}</p>}
 
           {/* Үлкен дөңгелек батырма — планшетте бір басумен түсіру үшін.
               Видеоның үстінде тұрады, сондықтан экран аласа болса да көрінеді. */}
@@ -175,7 +177,7 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
               className="cammodal__shutter"
               onClick={shoot}
               disabled={!ready}
-              aria-label="Түсіру"
+              aria-label={L.shoot}
             >
               <span />
             </button>
@@ -189,14 +191,14 @@ function CaptureModal({ deviceId, devices, onSelectDevice, onClose, onCapture })
             onChange={(e) => onSelectDevice(e.target.value)}
           >
             {devices.map((d, i) => (
-              <option key={d.deviceId || i} value={d.deviceId}>{cameraLabel(d, i)}</option>
+              <option key={d.deviceId || i} value={d.deviceId}>{cameraLabel(d, i, L.label)}</option>
             ))}
           </select>
 
           {size && <span className="cammodal__size">{size[0]}×{size[1]}</span>}
 
           <button className="btn btn--primary" onClick={shoot} disabled={!ready}>
-            Түсіру
+            {L.shoot}
           </button>
         </div>
       </div>

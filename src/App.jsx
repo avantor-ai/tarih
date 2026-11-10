@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import kk from './i18n/kk'
+import { DICTS, useLang } from './i18n'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
@@ -12,7 +12,8 @@ import { useReveal } from './lib/useReveal'
 import './styles/app.css'
 
 export default function App() {
-  const t = kk
+  const [lang, setLang] = useLang()
+  const t = DICTS[lang]
   // 3D сахнаға скролл күйін ref арқылы береміз — қайта рендер болмайды
   const scrollRef = useRef(0)
 
@@ -30,10 +31,10 @@ export default function App() {
 
   return (
     <>
-      <Nav t={t} />
+      <Nav t={t} lang={lang} setLang={setLang} />
       <main>
         <Hero t={t} scrollRef={scrollRef} />
-        <Marquee items={t.marquee} />
+        <Marquee key={lang} items={t.marquee} />
 
         <section id="intro" className="section section--dark intro">
           <div className="container intro__grid">
@@ -48,9 +49,9 @@ export default function App() {
           </div>
         </section>
 
-        <Translator t={t} />
-        <Archive t={t} />
-        <Knowledge t={t} />
+        <Translator t={t} lang={lang} />
+        <Archive t={t} lang={lang} />
+        <Knowledge t={t} lang={lang} />
         <About t={t} />
       </main>
       <Footer t={t} />

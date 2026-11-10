@@ -37,7 +37,7 @@ export function useCameras() {
       if (cams.length && cams.some((c) => c.label)) setPermission('granted')
       return cams
     } catch (e) {
-      setError(e.message)
+      setError({ name: e?.name, message: e?.message })
       return []
     }
   }, [supported])
@@ -54,7 +54,8 @@ export function useCameras() {
       return true
     } catch (e) {
       setPermission(e.name === 'NotAllowedError' ? 'denied' : 'unknown')
-      setError(cameraErrorText(e))
+      // Мәтінге компонентте айналады — таңдалған тілде шығуы үшін
+      setError({ name: e?.name, message: e?.message })
       return false
     }
   }, [supported, refresh])
@@ -86,27 +87,19 @@ export function useCameras() {
 }
 
 /** Камераның атауын адам оқитын күйге келтіру */
-export function cameraLabel(device, index) {
+export function cameraLabel(device, index, word = 'Камера') {
   if (device.label) {
     // «HD Webcam (046d:0825)» → «HD Webcam»
     return device.label.replace(/\s*\([0-9a-f]{4}:[0-9a-f]{4}\)\s*$/i, '').trim()
   }
-  return `Камера ${index + 1}`
+  return `${word} ${index + 1}`
 }
 
-export function cameraErrorText(e) {
-  switch (e?.name) {
-    case 'NotAllowedError':
-      return 'Камераға рұқсат берілмеді. Браузердің мекенжай жолындағы құлып белгісінен рұқсат беріңіз.'
-    case 'NotFoundError':
-      return 'Камера табылмады. Сыртқы камера қосулы ма, тексеріңіз.'
-    case 'NotReadableError':
-      return 'Камераны басқа бағдарлама пайдаланып тұр. Оны жауып, қайталаңыз.'
-    case 'OverconstrainedError':
-      return 'Таңдалған камера қолжетімсіз. Тізімнен басқасын таңдаңыз.'
-    case 'SecurityError':
-      return 'Камера тек қауіпсіз қосылымда (HTTPS) жұмыс істейді.'
-    default:
-      return e?.message || 'Камераны ашу мүмкін болмады.'
-  }
+/**
+ * Қате → таңдалған тілдегі мәтін.
+ * @param {{name?: string, message?: string}} e
+ * @param {object} L  t.camera
+ */
+export function cameraErrorText(e, L) {
+  return L.errors[e?.name] || e?.message || L.errors.default
 }

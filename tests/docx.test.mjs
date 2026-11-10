@@ -2,9 +2,13 @@
  * .docx экспортын тексеру: файл шынымен ашыла ма, ішінде мәтін бар ма.
  * Іске қосу:
  *   npx esbuild tests/docx.test.mjs --bundle --platform=node --format=esm \
- *     --outfile=/tmp/d.mjs && node /tmp/d.mjs
+ *     --outfile=<temp>/d.mjs && node <temp>/d.mjs
  */
 import { writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import kk from '../src/i18n/kk.js'
+import en from '../src/i18n/en.js'
 import { buildDocx, buildPlainText } from '../src/lib/docxExport.js'
 
 const mock = [{
@@ -22,12 +26,16 @@ const mock = [{
   },
 }]
 
-const blob = await buildDocx({ pages: mock, title: 'Тесттік құжат' })
+const blob = await buildDocx({ pages: mock, L: kk.docx, blocks: kk.archive.blocks, title: 'Тесттік құжат' })
+const out = join(tmpdir(), 'tas-jazular-test.docx')
 const buf = Buffer.from(await blob.arrayBuffer())
-writeFileSync('/tmp/tas-jazular-test.docx', buf)
+writeFileSync(out, buf)
 
-console.log('docx жазылды: /tmp/tas-jazular-test.docx,', buf.length, 'байт')
+console.log('docx жазылды:', out, buf.length, 'байт')
 console.log('ZIP қолтаңбасы:', buf.subarray(0, 4).toString('hex'))
 console.log()
 console.log('--- txt үлгісі ---')
-console.log(buildPlainText({ pages: mock }).slice(0, 400))
+console.log(buildPlainText({ pages: mock, L: kk.docx, blocks: kk.archive.blocks }).slice(0, 400))
+console.log()
+console.log('--- txt (en) ---')
+console.log(buildPlainText({ pages: mock, L: en.docx, blocks: en.archive.blocks }).slice(0, 300))

@@ -5,10 +5,11 @@ import toteAlphabet from '../data/alphabet-tote.json'
 import { buildIndex, findMatch, fileToImage, downscaleForUpload } from '../lib/imageHash'
 import { autoTransliterate, transliterateRunic, transliterateTote } from '../lib/translit'
 import CameraPicker from './CameraPicker'
+import { localizeMonument } from '../lib/localize'
 
 const MODE = { DEMO: 'demo', AI: 'ai' }
 
-export default function Translator({ t }) {
+export default function Translator({ t, lang }) {
   const [mode, setMode] = useState(MODE.DEMO)
   const [aiReady, setAiReady] = useState(false)
   const [index, setIndex] = useState(null)
@@ -77,10 +78,10 @@ export default function Translator({ t }) {
     const resp = await fetch('/api/recognize', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ imageBase64: base64, mimeType }),
+      body: JSON.stringify({ imageBase64: base64, mimeType, lang }),
     })
     const data = await resp.json()
-    if (!resp.ok) throw new Error(data.message || 'AI қатесі')
+    if (!resp.ok) throw new Error(data.message || t.translator.aiError)
     setResult({ source: 'ai', ai: data.result })
   }
 
@@ -131,7 +132,7 @@ export default function Translator({ t }) {
           >
             <span className="mode__label">
               {t.translator.modeAI}
-              {!aiReady && <span className="mode__badge">кілт жоқ</span>}
+              {!aiReady && <span className="mode__badge">{t.translator.noKey}</span>}
             </span>
             <span className="mode__hint">
               {aiReady ? t.translator.modeAIHint : t.translator.aiUnavailable}
@@ -158,7 +159,7 @@ export default function Translator({ t }) {
                 <p className="drop__hint">{t.translator.dropHint}</p>
 
                 <div className="drop__camera" onClick={(e) => e.stopPropagation()}>
-                  <CameraPicker onCapture={handleFile} label={t.translator.camera} />
+                  <CameraPicker t={t} onCapture={handleFile} label={t.translator.camera} />
                 </div>
 
                 {index === null && (
@@ -179,7 +180,7 @@ export default function Translator({ t }) {
                 {/* Тізім сурет жүктелген соң да көрініп тұрсын —
                     презентацияда қайта түсіру ыңғайлы болуы үшін */}
                 <div className="preview__cam">
-                  <CameraPicker onCapture={handleFile} label={t.translator.camera} compact />
+                  <CameraPicker t={t} onCapture={handleFile} label={t.translator.camera} compact />
                 </div>
               </>
             )}
@@ -196,7 +197,7 @@ export default function Translator({ t }) {
             {error && <div className="result result--error">{error}</div>}
 
             {!busy && !error && result && (
-              <ResultCard t={t} result={result} />
+              <ResultCard t={t} lang={lang} result={result} />
             )}
 
             {!busy && !error && !result && (
@@ -283,7 +284,7 @@ export default function Translator({ t }) {
 
 /* ══════════════════════  Нәтиже карточкасы  ══════════════════════ */
 
-function ResultCard({ t, result }) {
+function ResultCard({ t, lang, result }) {
   if (result.notFound) {
     return (
       <div className="result result--none">
@@ -291,7 +292,7 @@ function ResultCard({ t, result }) {
         <p>{t.translator.notFoundHint}</p>
         {result.best && (
           <p className="result__debug">
-            ең жақын: {result.best.item.atauy} · айырма {result.best.score.toFixed(1)}
+            {t.translator.nearest}: {localizeMonument(result.best.item, lang).atauy} · {t.translator.distance} {result.best.score.toFixed(1)}
           </p>
         )}
       </div>
@@ -339,7 +340,7 @@ function ResultCard({ t, result }) {
   }
 
   // демо режимі — эталондық базадан
-  const m = result.item
+  const m = localizeMonument(result.item, lang)
 
   // Шағатай хаты: таңбалар емес, толық мәтін — транскрипция мен аударма
   if (m.type === 'chagatai') {
@@ -355,7 +356,7 @@ function ResultCard({ t, result }) {
           <LongText text={m.transkripsiya} t={t} />
         </Field>
         <Field label={t.translator.translation}>
-          <LongText text={m.tolyq_kazakh} t={t} />
+          <LongText text={m.meaning} t={t} />
         </Field>
 
         <p className="result__notes">{t.translator.chagataiNote}</p>
@@ -385,13 +386,13 @@ function ResultCard({ t, result }) {
         <Field label={t.translator.latin}>
           <span className="latin-translit">{m.latin}</span>
           {auto.latin && auto.latin !== m.latin && (
-            <span className="result__auto">алгоритм: {auto.latin}</span>
+            <span className="result__auto">{t.translator.algorithm}: {auto.latin}</span>
           )}
         </Field>
       )}
 
       <Field label={t.translator.modern}><strong>{m.kazakh}</strong></Field>
-      <Field label={t.translator.meaning}>{m.tolyq_kazakh}</Field>
+      <Field label={t.translator.meaning}>{m.meaning}</Field>
 
       {m.type === 'runic' && auto.vowelsOmitted && (
         <p className="result__notes">{t.translator.vowelNote}</p>
@@ -421,14 +422,14 @@ function ManualResult({ t, r }) {
 
       {r.script === 'kazakh' && (
         <>
-          <Field label="Руникамен"><span className="runic">{r.runic}</span></Field>
-          <Field label="Төте жазумен"><span className="arabic">{r.tote}</span></Field>
+          <Field label={t.translator.inRunic}><span className="runic">{r.runic}</span></Field>
+          <Field label={t.translator.inTote}><span className="arabic">{r.tote}</span></Field>
         </>
       )}
 
       {r.unknown?.length > 0 && (
         <p className="result__notes">
-          танылмаған таңба: {[...new Set(r.unknown)].join(' ')}
+          {t.translator.unknownSign}: {[...new Set(r.unknown)].join(' ')}
         </p>
       )}
     </div>
