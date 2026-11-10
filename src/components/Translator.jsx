@@ -6,6 +6,7 @@ import { buildIndex, findMatch, fileToImage, downscaleForUpload } from '../lib/i
 import { autoTransliterate, transliterateRunic, transliterateTote } from '../lib/translit'
 import CameraPicker from './CameraPicker'
 import { localizeMonument } from '../lib/localize'
+import ReviewModal, { REVIEWER_PHOTO } from './ReviewModal'
 
 const MODE = { DEMO: 'demo', AI: 'ai' }
 
@@ -21,6 +22,7 @@ export default function Translator({ t, lang }) {
   const [manual, setManual] = useState('')
   const [kbd, setKbd] = useState(null) // 'runic' | 'tote' | null
   const [dragOver, setDragOver] = useState(false)
+  const [reviewFor, setReviewFor] = useState(null) // тексеруге жіберілетін аударма
 
   const fileRef = useRef(null)
 
@@ -197,7 +199,7 @@ export default function Translator({ t, lang }) {
             {error && <div className="result result--error">{error}</div>}
 
             {!busy && !error && result && (
-              <ResultCard t={t} lang={lang} result={result} />
+              <ResultCard t={t} lang={lang} result={result} onReview={setReviewFor} />
             )}
 
             {!busy && !error && !result && (
@@ -278,13 +280,17 @@ export default function Translator({ t, lang }) {
           {manualResult && <ManualResult t={t} r={manualResult} />}
         </div>
       </div>
+
+      {reviewFor && (
+        <ReviewModal t={t} lang={lang} subject={reviewFor} onClose={() => setReviewFor(null)} />
+      )}
     </section>
   )
 }
 
 /* ══════════════════════  Нәтиже карточкасы  ══════════════════════ */
 
-function ResultCard({ t, lang, result }) {
+function ResultCard({ t, lang, result, onReview }) {
   if (result.notFound) {
     return (
       <div className="result result--none">
@@ -335,6 +341,11 @@ function ResultCard({ t, lang, result }) {
           <p className="result__notes">{t.translator.chagataiAiNote}</p>
         )}
         {a.notes && <p className="result__notes">{a.notes}</p>}
+
+        <ReviewCta t={t} onClick={() => onReview({
+          source: 'ai', script: a.script, title: a.monument || '',
+          original: a.signs || a.transcription || '', translation: a.translation || a.kazakh || '',
+        })} />
       </div>
     )
   }
@@ -361,6 +372,8 @@ function ResultCard({ t, lang, result }) {
 
         <p className="result__notes">{t.translator.chagataiNote}</p>
         <p className="result__source">{m.sipattama}</p>
+
+        <ReviewCta t={t} onClick={() => onReview(subjectOf(m))} />
       </div>
     )
   }
@@ -399,6 +412,28 @@ function ResultCard({ t, lang, result }) {
       )}
 
       <p className="result__source">{m.sipattama}</p>
+
+      <ReviewCta t={t} onClick={() => onReview(subjectOf(m))} />
+    </div>
+  )
+}
+
+/** Эталоннан тексерілетін аударманың қысқа сипаттамасы */
+function subjectOf(m) {
+  return {
+    source: 'demo', id: m.id, script: m.type, title: m.atauy,
+    original: m.runic || m.arab || m.transkripsiya || '',
+    translation: m.meaning || '',
+  }
+}
+
+/** «Тексеруге жіберу» блогы: тексерушінің кішкентай суреті + батырма */
+function ReviewCta({ t, onClick }) {
+  return (
+    <div className="review-cta">
+      <img src={REVIEWER_PHOTO} alt="" className="review-cta__face" />
+      <p className="review-cta__hint">{t.review.hint}</p>
+      <button className="btn btn--primary review-cta__btn" onClick={onClick}>{t.review.button}</button>
     </div>
   )
 }
