@@ -405,7 +405,7 @@ function ResultCard({ t, lang, result, onReview }) {
       )}
 
       <Field label={t.translator.modern}><strong>{m.kazakh}</strong></Field>
-      <Field label={t.translator.meaning}>{m.meaning}</Field>
+      <Field label={t.translator.meaning}><LongText text={m.meaning} t={t} /></Field>
 
       {m.type === 'runic' && auto.vowelsOmitted && (
         <p className="result__notes">{t.translator.vowelNote}</p>

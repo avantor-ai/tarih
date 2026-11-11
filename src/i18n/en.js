@@ -257,7 +257,7 @@ export default {
     stats: [
       { value: '73', label: 'runic signs' },
       { value: '33', label: 'Tote letters' },
-      { value: '27', label: 'reference monuments' },
+      { value: '28', label: 'reference monuments' },
       { value: '1300', label: 'years of history' },
     ],
     howTitle: 'How it works',

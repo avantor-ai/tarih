@@ -257,7 +257,7 @@ export default {
     stats: [
       { value: '73', label: 'runik işaret' },
       { value: '33', label: 'Töte harfi' },
-      { value: '27', label: 'referans anıt' },
+      { value: '28', label: 'referans anıt' },
       { value: '1300', label: 'yıllık tarih' },
     ],
     howTitle: 'Nasıl çalışır',

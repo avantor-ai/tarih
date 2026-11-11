@@ -214,7 +214,7 @@ function Detail({ t, lang, m, onClose }) {
 
             <div className="modal__script">
               <span className="field__label">{t.knowledge.meaning}</span>
-              <div className="modal__kazakh">{m.meaning}</div>
+              <div className="modal__kazakh modal__longtext">{m.meaning}</div>
             </div>
             </>
             )}

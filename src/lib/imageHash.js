@@ -201,18 +201,23 @@ export async function buildIndex(items, onProgress) {
   const index = []
   for (let i = 0; i < items.length; i++) {
     const item = items[i]
-    let fp = cache[item.id]
-    if (!fp) {
-      try {
-        const img = await loadImage(item.image)
-        fp = fingerprint(img)
-        cache[item.id] = fp
-      } catch (e) {
-        console.warn('индекске қосылмады:', item.id, e.message)
-        continue
+    // Көпбетті жазба (мыс. өлеңнің үш беті): әр беттің өз саусақ ізі бар,
+    // бірақ бәрі бір жазбаға апарады — қай бетті түсірсе де танылады.
+    const sources = [item.image, ...(item.pages || []).filter((p) => p !== item.image)]
+    for (let j = 0; j < sources.length; j++) {
+      const key = j === 0 ? item.id : `${item.id}#${j}`
+      let fp = cache[key]
+      if (!fp) {
+        try {
+          fp = fingerprint(await loadImage(sources[j]))
+          cache[key] = fp
+        } catch (e) {
+          console.warn('индекске қосылмады:', key, e.message)
+          continue
+        }
       }
+      index.push({ item, fp })
     }
-    index.push({ item, fp })
     onProgress?.((i + 1) / items.length)
   }
 
@@ -233,9 +238,13 @@ export async function buildIndex(items, onProgress) {
 export function findMatch(queryImg, index, threshold = 0.31) {
   const qfp = fingerprint(queryImg)
 
+  // Бір жазбаның бірнеше беті болса, ең жақсысы ғана қалады —
+  // әйтпесе екінші орынды сол жазбаның басқа беті алып, «алшақтық» бұзылады.
+  const seen = new Set()
   const ranked = index
     .map(({ item, fp }) => ({ item, ...distance(qfp, fp) }))
     .sort((a, b) => a.score - b.score)
+    .filter((r) => !seen.has(r.item.id) && seen.add(r.item.id))
 
   if (!ranked.length) return null
   const best = ranked[0]
