@@ -34,7 +34,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 export const isEmail = (v) => EMAIL_RE.test(String(v).trim())
 
 const LANG_NAME = { kk: 'қазақша', ru: 'орысша', en: 'ағылшынша', tr: 'түрікше' }
-const SOURCE_NAME = { demo: 'Эталондық база', ai: 'AI режимі (Gemini)' }
+const SOURCE_NAME = { demo: 'Эталондық база', ai: 'AI режимі' }
 
 /** Маманға келетін хаттың мәтіні — оқуға ыңғайлы, қазақша */
 export function buildMessage(r) {

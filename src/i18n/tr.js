@@ -71,7 +71,7 @@ export default {
     modeDemo: 'Demo modu',
     modeAI: 'Yapay zekâ modu',
     modeDemoHint: 'Referans veri tabanı · çevrimdışı çalışır',
-    modeAIHint: 'Gemini Vision · tanımadığı yazıları da okur',
+    modeAIHint: 'Claude (Anthropic) · tanımadığı yazıları da okur',
     aiUnavailable: 'Yapay zekâ modu kullanılamıyor — sunucuda anahtar yok',
     noKey: 'anahtar yok',
     aiError: 'Yapay zekâ hatası',
@@ -277,7 +277,7 @@ export default {
       {
         n: '03',
         t: 'Yapay zekâ modu',
-        d: 'Anahtarı açarsanız fotoğraf Gemini Vision modeline gönderilir; '
+        d: 'Anahtarı açarsanız fotoğraf Claude (Anthropic) modeline gönderilir; '
           + 'model veri tabanında olmayan yazıları da okumaya çalışır.',
       },
     ],

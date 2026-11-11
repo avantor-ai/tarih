@@ -84,7 +84,7 @@ export default function Translator({ t, lang }) {
     })
     const data = await resp.json()
     if (!resp.ok) throw new Error(data.message || t.translator.aiError)
-    setResult({ source: 'ai', ai: data.result })
+    setResult({ source: 'ai', provider: data.source, ai: data.result })
   }
 
   /* ── қолмен терілген мәтін ── */
@@ -309,7 +309,7 @@ function ResultCard({ t, lang, result, onReview }) {
     const a = result.ai
     return (
       <div className="result">
-        <div className="result__badge result__badge--ai">Gemini Vision</div>
+        <div className="result__badge result__badge--ai">{result.provider === 'claude' ? 'Claude' : 'Gemini Vision'}</div>
         {a.monument && <h3>{a.monument}</h3>}
 
         <Confidence t={t} value={a.confidence ?? 0} />

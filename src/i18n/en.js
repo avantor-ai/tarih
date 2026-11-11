@@ -71,7 +71,7 @@ export default {
     modeDemo: 'Demo mode',
     modeAI: 'AI mode',
     modeDemoHint: 'Reference base · works offline',
-    modeAIHint: 'Gemini Vision · reads unfamiliar scripts too',
+    modeAIHint: 'Claude (Anthropic) · reads unfamiliar scripts too',
     aiUnavailable: 'AI mode unavailable — the server has no key',
     noKey: 'no key',
     aiError: 'AI error',
@@ -277,7 +277,7 @@ export default {
       {
         n: '03',
         t: 'AI mode',
-        d: 'Switch the toggle on and the photo is sent to the Gemini Vision model, '
+        d: 'Switch the toggle on and the photo is sent to the Claude (Anthropic) model, '
           + 'which tries to read scripts that are not in the base.',
       },
     ],

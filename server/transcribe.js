@@ -13,12 +13,18 @@
 // Баптаулар модуль жүктелгенде емес, шақырылғанда оқылады —
 // себебі recognize.js-тегідей (ES импорттары dotenv-тен бұрын жүреді).
 import { msg, normLang, answerLanguageRule } from './i18n.js'
+import { claudeVisionJSON, claudeModel, claudeKey, TranscribeSchema } from './claude.js'
 
-const cfg = () => ({
-  provider: process.env.AI_PROVIDER || 'gemini',
-  model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-  key: process.env.GEMINI_API_KEY,
-})
+/** Провайдер: AI_PROVIDER=anthropic (Claude) немесе gemini (әдепкі) */
+const cfg = () => {
+  const provider = process.env.AI_PROVIDER || 'gemini'
+  if (provider === 'anthropic') return { provider, model: claudeModel(), key: claudeKey() }
+  return {
+    provider,
+    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+    key: process.env.GEMINI_API_KEY,
+  }
+}
 const aiEnabled = () => process.env.AI_ENABLED !== 'false' && Boolean(cfg().key)
 
 const MAX_IMAGE_BYTES = 6 * 1024 * 1024
@@ -98,6 +104,19 @@ export async function transcribe({ imageBase64, mimeType, lang: rawLang }) {
   }
 
   const { provider, model, key } = cfg()
+  if (provider === 'anthropic') {
+    const r = await claudeVisionJSON({
+      prompt: transcribePromptFor(lang), imageBase64, mimeType, schema: TranscribeSchema, maxTokens: 16000,
+    })
+    if (!r.ok) {
+      const kind = r.kind === 'truncated' ? 'truncated_page' : r.kind
+      return {
+        status: r.status === 429 ? 429 : 502,
+        body: { error: r.kind, message: msg(lang, kind) + (r.kind === 'network' && r.detail ? ': ' + r.detail : '') },
+      }
+    }
+    return { status: 200, body: { ok: true, source: 'claude', model: r.model, result: r.result } }
+  }
   if (provider !== 'gemini') {
     return {
       status: 501,

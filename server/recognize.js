@@ -19,12 +19,18 @@
  * басталғанға дейін қойылады, сондықтан ол жақта бәрібір.
  */
 import { msg, normLang, answerLanguageRule } from './i18n.js'
+import { claudeVisionJSON, claudeModel, claudeKey, RecognizeSchema } from './claude.js'
 
-const cfg = () => ({
-  provider: process.env.AI_PROVIDER || 'gemini',
-  model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-  key: process.env.GEMINI_API_KEY,
-})
+/** Провайдер: AI_PROVIDER=anthropic (Claude) немесе gemini (әдепкі) */
+const cfg = () => {
+  const provider = process.env.AI_PROVIDER || 'gemini'
+  if (provider === 'anthropic') return { provider, model: claudeModel(), key: claudeKey() }
+  return {
+    provider,
+    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+    key: process.env.GEMINI_API_KEY,
+  }
+}
 
 /**
  * AI режимін жариялы сайтта әдейі өшіріп қоюға болады.
@@ -146,6 +152,7 @@ export async function recognize({ imageBase64, mimeType, lang: rawLang }) {
   }
 
   const { provider } = cfg()
+  if (provider === 'anthropic') return recognizeWithClaude({ imageBase64, mimeType, lang })
   if (provider !== 'gemini') {
     return {
       status: 501,
@@ -157,6 +164,19 @@ export async function recognize({ imageBase64, mimeType, lang: rawLang }) {
   }
 
   return recognizeWithGemini({ imageBase64, mimeType, lang })
+}
+
+async function recognizeWithClaude({ imageBase64, mimeType, lang }) {
+  const r = await claudeVisionJSON({
+    prompt: promptFor(lang), imageBase64, mimeType, schema: RecognizeSchema, maxTokens: 16000,
+  })
+  if (!r.ok) {
+    return {
+      status: r.status === 429 ? 429 : 502,
+      body: { error: r.kind, message: msg(lang, r.kind) + (r.kind === 'network' && r.detail ? ': ' + r.detail : '') },
+    }
+  }
+  return { status: 200, body: { ok: true, source: 'claude', model: r.model, result: r.result } }
 }
 
 async function recognizeWithGemini({ imageBase64, mimeType, lang }) {

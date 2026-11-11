@@ -75,7 +75,7 @@ export default {
     modeDemo: 'Демо режимі',
     modeAI: 'AI режимі',
     modeDemoHint: 'Эталондық база · офлайн жұмыс істейді',
-    modeAIHint: 'Gemini Vision · таныс емес жазуды да оқиды',
+    modeAIHint: 'Claude (Anthropic) · таныс емес жазуды да оқиды',
     aiUnavailable: 'AI режимі қолжетімсіз — сервер кілтті таппады',
     noKey: 'кілт жоқ',
     aiError: 'AI қатесі',
@@ -284,7 +284,7 @@ export default {
       {
         n: '03',
         t: 'AI режимі',
-        d: 'Тумблерді қоссаңыз, сурет Gemini Vision моделіне жіберіледі — ол базада '
+        d: 'Тумблерді қоссаңыз, сурет Claude (Anthropic) моделіне жіберіледі — ол базада '
           + 'жоқ жазуды да оқуға тырысады.',
       },
     ],

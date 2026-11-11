@@ -86,6 +86,12 @@ const M = {
     en: 'The page is too long — the answer was cut off. Try splitting the page and uploading the parts separately.',
     tr: 'Sayfa çok uzun — yanıt sığmadı. Sayfayı bölüp parçaları ayrı ayrı yüklemeyi deneyin.',
   },
+  refused: {
+    kk: 'Модель бұл суретті өңдеуден бас тартты. Басқа сурет жүктеп көріңіз.',
+    ru: 'Модель отказалась обрабатывать это изображение. Попробуйте другое фото.',
+    en: 'The model declined to process this image. Please try another photo.',
+    tr: 'Model bu görseli işlemeyi reddetti. Lütfen başka bir fotoğraf deneyin.',
+  },
   parse: {
     kk: 'Модельдің жауабын оқу мүмкін болмады',
     ru: 'Не удалось разобрать ответ модели',
